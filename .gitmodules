@@ -1,0 +1,3 @@
+[submodule "src/coffee/core"]
+	path = src/coffee/core
+	url = git@github.com:apedyashev/node-bootstrap-core.git

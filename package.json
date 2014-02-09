@@ -1,0 +1,15 @@
+{
+  "name": "node-penny-auction",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "ejs": "*",
+    "traceback": "*",
+    "piler": "0.x",
+    "ejs-locals": "~1.0.2"
+  }
+}
