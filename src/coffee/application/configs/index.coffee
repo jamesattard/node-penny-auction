@@ -1,3 +1,4 @@
+_ = require "underscore"
 module.exports = (app)->
   config:   require('./config.js').config(app)
   db:       require('./db.js').configDb(app)

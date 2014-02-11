@@ -1,16 +1,23 @@
 # File: src/coffee/application/models/auction.coffee
 
+Q       = require('q')
+Model = require('../../core/models').Model
+mongoose = require('mongoose')
+
 # Model that implements DB-related operations for auctions
 #
 # @author   Alexey Pedyashev <alexey.pedyashev@gmail.com>
 #
-class Auction extends Model.Mongo
+class exports.Auction extends Model.Mongo
   # Mongoose Schema  description
   _schemaDescription =
     title:          String
     description:    String
-    bidders:        [{}]
+    images:         [ String ]
+    bidders:        [{userId: mongoose.Schema.ObjectId, username: String}]
+    lastBidder:     String
     startingPrice:  Number
+    currentPrice:   Number
     retailerPrice:  Number
     startDate:      Date
     endDate:        Date
@@ -31,15 +38,19 @@ class Auction extends Model.Mongo
   #
   # @todo: add updating of user when _id is presented
   #
-  save: (inUserData, onComplete)->
-    if inUserData.email?
-      @isEmailExist inUserData.email, (isExist)=>
-        if not isExist
-          @_saveUser inUserData, onComplete
-        #user with such email already exist
-        else
-          exception = new ExceptionUserMessage("error", "User with such email already exist")
-          onComplete(yes, exception)
+  save: (inData)->
+    defer = Q.defer()
+
+    doc = @createMongooseDocument(inData)
+
+    #save the document
+    doc.save (err)->
+      if err
+        defer.reject new ExceptionUserMessage("error", "Unable to save")
+      else
+        defer.resolve()
+
+    defer.promise
 
 
   # Creates user and returns it or finds user with email=inUserData.email and returns it
@@ -48,18 +59,41 @@ class Auction extends Model.Mongo
   # @param  [callback]    onComplete    callback function that is called once save operation is completed. Signature:
   #                                     onComplete(err, info) - where err and info is either userData or instance of ExceptionUserMessage
   #
-  findByEmailOrCreate: (inUserData, onComplete)->
-    @isEmailExist inUserData.email, (isExist)=>
-      if isExist
-        #read user data from db
-        @getByEmail inUserData.email, onComplete
+  findAll: ->
+    defer = Q.defer()
+    @getMongooseModel().find().exec (err, result)->
+      if err
+        defer.reject new ExceptionUserMessage("error", "An error has occured while reading auctions")
       else
-        #add new user
-        @_saveUser inUserData, (err, exception)=>
-          unless err
-            @getByEmail inUserData.email, onComplete
-          else
-            onComplete yes, exception
+        defer.resolve result
+
+    defer.promise
+
+
+  doBid: (inAuctionId, inUser)->
+    defer = Q.defer()
+
+    options     = {}
+    conditions  = {"_id": inAuctionId}
+    bidder      =
+      userId    : inUser.id
+      username  : inUser.username
+      # @todo: add curent bid val
+
+    update      =
+      $addToSet: {bidders: bidder }
+      lastBidder: inUser.username
+      $inc: {currentPrice: 0.01 }
+    @getMongooseModel().update conditions, update, options, (err, affected)->
+      if err
+        defer.reject new ExceptionUserMessage("error", "DB error")
+      else
+        defer.resolve affected
+
+    defer.promise.then ()=>
+      @getById(inAuctionId)
+
+
 
 
   # Check if user with given email is already exists in DB
@@ -204,4 +238,3 @@ class Auction extends Model.Mongo
       onComplete err, exception
 
 
-exports.User = User

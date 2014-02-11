@@ -3,7 +3,7 @@
 /*
 Module dependencies.
  */
-var CoreController, app, e, engine, express, http, initializers, path, routes, srv;
+var CoreController, app, connect, cookie, e, engine, express, http, initializers, io, path, routes, srv;
 
 CoreController = require('./core').CoreController;
 
@@ -47,6 +47,7 @@ app.use(express.cookieParser("your secret here"));
 
 app.use(express.cookieSession({
   secret: 'cssa21csacs-*562312scas+-csa32ca2c3sa',
+  key: 'express.sid',
   cookie: {
     maxAge: 12 * 1000 * 60 * 60 * 10
   }
@@ -60,13 +61,38 @@ if ("development" === app.get("env")) {
   app.use(express.errorHandler());
 }
 
-srv = http.createServer(app).listen(app.get("port"), function() {
-  return console.log("Express server listening on port " + app.get("port"));
+srv = http.createServer(app);
+
+io = require('socket.io').listen(srv);
+
+cookie = require("cookie");
+
+connect = require("connect");
+
+io.set("authorization", function(handshakeData, accept) {
+  var sessionJsonCookie;
+  if (handshakeData.headers.cookie) {
+    handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
+    sessionJsonCookie = connect.utils.parseSignedCookie(handshakeData.cookie["express.sid"], 'cssa21csacs-*562312scas+-csa32ca2c3sa');
+    handshakeData.session = connect.utils.parseJSONCookie(sessionJsonCookie);
+    if (handshakeData.cookie["express.sid"] === sessionJsonCookie) {
+      return accept("Cookie is invalid.", false);
+    }
+  } else {
+    return accept("No cookie transmitted.", false);
+  }
+  accept(null, true);
 });
 
 CoreController.setStatic('srv', srv);
 
+srv.listen(app.get("port"), function() {
+  return console.log("Express server listening on port " + app.get("port"));
+});
+
 routes = require("./application/routes.js")(app);
+
+require("./application/listeners")(io);
 
 try {
 

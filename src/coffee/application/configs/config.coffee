@@ -6,7 +6,7 @@ exports.config = (app)->
     app.get("env") is 'development'
     config =
       baseUrl:
-        val: 'http://bmk.rrs-lab.com/'
+        val: 'http://localhost:3000'
         allowInFrontend: true
       apiRoot:
         val: 'api'

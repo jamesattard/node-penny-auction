@@ -12,7 +12,7 @@ exports.configDb = (app)->
       mongo:
         host: 'localhost'
       #    port:27017
-        dbName: 'links_bookmarklet'
+        dbName: 'penny_auction'
 
   #
   # DEVELOPMENT settings
@@ -27,6 +27,6 @@ exports.configDb = (app)->
       mongo:
         host: 'localhost'
       #    port:27017
-        dbName: 'links_bookmarklet'
+        dbName: 'penny_auction'
 
   return config

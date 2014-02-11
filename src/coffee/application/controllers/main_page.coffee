@@ -1,5 +1,6 @@
 
 FrontendController = require('./base/frontend').FrontendController
+Model = require('../../core/models').Model
 
 class exports.MainPageController extends FrontendController
   constructor: ->
@@ -16,8 +17,54 @@ class exports.MainPageController extends FrontendController
 
 
   index: (req, res)=>
-    res.render @_getViewName(),
-      jsTags  : @_assets.js.renderTags()
-      cssTags : @_assets.css.renderTags()
+    appRoot = FrontendController.getStatic('appRoot')
+    viewName = @_getViewName()
+    @_assets.css.addUrl("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css")
+    @_assets.js.addFile(appRoot + "/public/javascripts/auction.js")
+    @_assets.js.addFile(appRoot + "/public/javascripts/#{viewName}.js")
+
+#    auctionData =
+#      title:          "iPod touch"
+#      description:    "iPod touch description"
+#      images:         ["https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSC5N7RemEVUvZne55CvHOKwQRaCHgsZiJxvtSAl9mk9vFq12Sp"]
+#      bidders:        [{}]
+#      startingPrice:  5.1
+#      retailerPrice:  99.99
+#      startDate:      new Date(2014, 0, 30, 15, 15)
+#      endDate:        new Date(2017, 5, 15, 12)
+#
+#    Model.instanceOf('auction').save(auctionData).then( ->
+#      console.log 'saved'
+#    )
+#    .fail (e)-> console.log e.toJson()
+
+
+    #get view name here since the _getViewName uses function-caller's name to build view name
+    Model.instanceOf('auction').findAll().then( (auctions)=>
+      console.log auctions
+      userPromise = @get('userPromise')
+      if userPromise
+        userPromise.then (user)=>
+          res.render viewName,
+            jsTags  : @_assets.js.renderTags()
+            cssTags : @_assets.css.renderTags()
+            auctions: auctions
+            getSecsDiffToDate: getSecsDiffToDate
+            configs: configs.getFrontendConfigs()
+            user: user
+        .fail (e)-> console.log e.toJson()
+      else
+        res.render viewName,
+          jsTags  : @_assets.js.renderTags()
+          cssTags : @_assets.css.renderTags()
+          auctions: auctions
+          getSecsDiffToDate: getSecsDiffToDate
+          configs: configs.getFrontendConfigs()
+          user: null
+    )
+    .fail (e)-> console.log e.toJson()
+
+
+
 
 

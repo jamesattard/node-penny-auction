@@ -5,7 +5,7 @@ exports.config = function(app) {
     app.get("env") === 'development';
     config = {
       baseUrl: {
-        val: 'http://bmk.rrs-lab.com/',
+        val: 'http://localhost:3000',
         allowInFrontend: true
       },
       apiRoot: {

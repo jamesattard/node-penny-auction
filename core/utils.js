@@ -23,3 +23,10 @@ global.ucfirst = function(inStr) {
   firstLetter = str.charAt(0).toUpperCase();
   return firstLetter + str.substr(1);
 };
+
+global.getSecsDiffToDate = function(inDate) {
+  var millisDiff, now;
+  now = new Date();
+  millisDiff = inDate.getTime() - now.getTime();
+  return millisDiff / 1000;
+};

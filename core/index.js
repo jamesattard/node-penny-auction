@@ -6,3 +6,5 @@ require("./helper");
 require("./exception");
 
 exports.CoreController = require('./controller.js').CoreController;
+
+global.Model = require('./models').Model;

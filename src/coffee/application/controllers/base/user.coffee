@@ -1,5 +1,8 @@
 # File: src/coffee/application/controllers/base/user.coffee
 
+CoreController  = require('../../../core/controller.js').CoreController
+Model           = require('../../../core/models').Model
+
 # Base controller to handle common user-related operation. Can be extended by both front-end and admin controllers
 #
 # Who can access these pages:
@@ -11,10 +14,9 @@
 #   BaseUserController.preprocessRequest(req, res, next)
 #
 # @author <Alexey.Pedyashev@gmail.com> Alexey Pedyashev
+class exports.BaseUserController extends  CoreController
+  self = BaseUserController
 
-CoreController = require('../../../core/controller.js').CoreController
-
-class exports.UserController extends  CoreController
   constructor: ->
     super
 
@@ -24,9 +26,11 @@ class exports.UserController extends  CoreController
     #get user's id from session and read user's data from cache/DB
     userId = req.session.userId
 
-    @_user = false
     #@todo: add "read user's data from cache/DB"
+    userPromise = false
     if userId
-      @_user = userId
+      userPromise = Model.instanceOf('user').getById(userId)
+
+    self.setStatic('userPromise', userPromise)
 
 

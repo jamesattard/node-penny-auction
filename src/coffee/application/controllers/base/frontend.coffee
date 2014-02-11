@@ -12,9 +12,11 @@
 #
 # @author <Alexey.Pedyashev@gmail.com> Alexey Pedyashev
 
-UserController = require('./user').UserController
+BaseUserController = require('./user').BaseUserController
 
-class exports.FrontendController  extends UserController
+class exports.FrontendController  extends BaseUserController
+  self = FrontendController
+
   constructor: ->
     super
 
@@ -33,8 +35,22 @@ class exports.FrontendController  extends UserController
     FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/prettyCheckboxes.js")
     FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/DD_belatedPNG-min.js")
     FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/functions.js")
+    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/spin.min.js")
+    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/helpers.js")
+    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/layout.js")
 
-    FrontendController.getStatic('assets').css.addFile(appRoot + "/public/stylesheets/_style.css")
+
+    FrontendController.getStatic('assets').css.addFile(appRoot + "/public/stylesheets/style.css")
     FrontendController.getStatic('assets').css.addFile(appRoot + "/public/stylesheets/prettyCheckboxes.css")
+
+    #if user is not logged in
+    userPromise = self.getStatic('userPromise')
+    unless userPromise
+      FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/jquery.fancybox.pack.js")
+      FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/jquery.validate.min.js")
+      FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/user-session.js")
+
+      FrontendController.getStatic('assets').css.addFile(appRoot + "/public/stylesheets/jquery.fancybox.css")
+
 
     next() if next?

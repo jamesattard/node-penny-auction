@@ -3,7 +3,7 @@ var piler, traceback;
 
 traceback = require('traceback');
 
-piler = require("piler");
+piler = require('piler-compat');
 
 exports.CoreController = (function() {
   var _params;

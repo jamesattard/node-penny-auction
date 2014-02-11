@@ -1,5 +1,8 @@
 # File: src/coffee/application/models/user.coffee
 
+Q     = require('q')
+Model = require('../../core/models').Model
+
 # Model that implements DB-related operations for users
 #
 # @author   Alexey Pedyashev <alexey.pedyashev@gmail.com>
@@ -7,19 +10,16 @@
 class User extends Model.Mongo
   # Mongoose Schema  description
   _schemaDescription =
-    firstName:            String
-    lastName:             String
-    email:                String
-    password:             String
-    provider:             String
-    socialData:           {}
-    linkCategories:       [{name: String}]
-    languageId:           String
-
+    firstName:  String
+    lastName:   String
+    email:      String
+    username:   String
+    password:   String
+    tokens:     Number
 
   constructor: ->
     #fields which shouldn't be read from DB
-    @_hiddenFields = ['socialData', 'password']
+    @_hiddenFields = ['password']
 
     #call parent class' constuctor
     super(_schemaDescription)
@@ -80,13 +80,22 @@ class User extends Model.Mongo
   #
   # @param  [String]      inEmail       Email address
   # @param  [String]      inPassword    Password(not encrypted)
-  # @param  [callback]    onComplete    callback function that is called once save operation is completed.
   #
-  login: (inEmail, inPassword, onComplete)->
+  login: (inEmail, inPassword)->
+    defer = Q.defer()
+
     crypto    = require('crypto')
     password  = crypto.createHash('md5').update(inPassword).digest("hex")
     @getMongooseModel().findOne({'email': inEmail, 'password': password}, @_allowedFields).exec (err, result)->
-      onComplete( result )
+      if err
+        defer.reject new ExceptionUserMessage("error", "DB error")
+      else
+        if result
+          defer.resolve(result)
+        else
+          defer.reject new ExceptionUserMessage("error", "Email or password is incorect")
+
+    defer.promise
 
 
   # Finds user with given email

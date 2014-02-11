@@ -6,7 +6,7 @@ exports.configDb = function(app) {
       dbs: ['mongo'],
       mongo: {
         host: 'localhost',
-        dbName: 'links_bookmarklet'
+        dbName: 'penny_auction'
       }
     };
   } else {
@@ -14,7 +14,7 @@ exports.configDb = function(app) {
       dbs: ['mongo'],
       mongo: {
         host: 'localhost',
-        dbName: 'links_bookmarklet'
+        dbName: 'penny_auction'
       }
     };
   }

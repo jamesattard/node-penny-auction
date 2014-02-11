@@ -4,8 +4,14 @@
     <title>CSS Free Templates with jQuery Slider</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/favicon.ico" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        <%- configs %>
+    </script>
     <%- jsTags %>
     <%- cssTags %>
+
+
 </head>
 <body>
 <div class="shell">
@@ -29,10 +35,15 @@
     <!-- Top Navigation -->
     <div id="top-navigation">
         <ul>
-            <li>0 items  $ 0,00</li>
-            <li><a class="start" title="My Account" href="#"><span></span>My Account</a></li>
-            <li><a class="cart" title="shopping cart" href="#"><span></span>shopping cart </a></li>
-            <li><a class="end" title="checkout" href="#">checkout<span></span></a></li>
+            <% if(user){ %>
+                <li><a id="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+                <li><%- user.firstName %> <%- user.lastName %> (<%- user.username %>)</li>
+                <li class="separator"></li>
+                <li>0 tokens</li>
+            <% }else{ %>
+            <li><a id="login" href="#login-modal" class="start" title="Login"><i class="fa fa-sign-in"></i> Login</a></li>
+            <!-- <li><a id="register" class="end" title="Register" href="#">Register<span></span></a></li> -->
+            <% } %>
         </ul>
     </div>
     <!-- END Top Navigation -->
@@ -40,6 +51,7 @@
 </div>
 <!-- END Header -->
 <!-- Navigation -->
+<!--
 <div id="navigation">
     <ul>
         <li><a title="Home" href="#">Home<span class="sep-right"></span></a></li>
@@ -72,7 +84,7 @@
         <li><a title="Sale!" href="#"><span class="sep-left"></span>sale!</a></li>
     </ul>
     <div class="cl"></div>
-</div>
+</div>  -->
 <!-- END Navigation -->
 <!-- Main  -->
 <div id="main">
@@ -126,5 +138,26 @@
 </div>
 <!-- END Main -->
 </div>
+
+    <div id="login-modal">
+        <form id="login-form" method="post" >
+            <div class="row">
+                <label class="control-label span3">Email:</label>
+                <input type="text" class="span8" name="email" placeholder="Email">
+                <span class="js-error-placement hidden error-placement icon span1"><i class="fa fa-exclamation-triangle"></i></span>
+            </div>
+
+            <div class="row">
+                <label class="control-label span3">Password:</label>
+                <input type="password" class="span8" name="password"  placeholder="Password">
+                <span class="js-error-placement hidden error-placement icon span1"><i class="fa fa-exclamation-triangle"></i></span>
+            </div>
+
+            <div class="row">
+                <input type="submit" class="btn btn-ok offset5" value="Login">
+            </div>
+        </form>
+    </div>
+
 </body>
 </html>
