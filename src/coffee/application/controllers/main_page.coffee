@@ -47,6 +47,7 @@ class exports.MainPageController extends FrontendController
       if userPromise
         userPromise.then (user)=>
           res.render viewName,
+            title: 'Auctions home'
             jsTags  : @_assets.renderJs()
             cssTags : @_assets.renderCss()
             auctions: auctions
@@ -56,6 +57,7 @@ class exports.MainPageController extends FrontendController
         .fail (e)-> console.log e.toJson()
       else
         res.render viewName,
+          title: 'Auctions home'
           jsTags  : @_assets.renderJs()
           cssTags : @_assets.renderCss()
           auctions: auctions

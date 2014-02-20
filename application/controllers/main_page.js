@@ -34,6 +34,7 @@ exports.MainPageController = (function(_super) {
         if (userPromise) {
           return userPromise.then(function(user) {
             return res.render(viewName, {
+              title: 'Auctions home',
               jsTags: _this._assets.renderJs(),
               cssTags: _this._assets.renderCss(),
               auctions: auctions,
@@ -46,6 +47,7 @@ exports.MainPageController = (function(_super) {
           });
         } else {
           return res.render(viewName, {
+            title: 'Auctions home',
             jsTags: _this._assets.renderJs(),
             cssTags: _this._assets.renderCss(),
             auctions: auctions,
