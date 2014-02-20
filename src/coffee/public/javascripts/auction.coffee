@@ -3,7 +3,7 @@ class Auction
     @init()
 
   init: ->
-    @_socket = io.connect('http://localhost:3000')
+    @_socket = io.connect(appConfig.config.baseUrl)
 
     @_findElements()
     @_attachEvents()

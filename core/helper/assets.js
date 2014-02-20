@@ -20,6 +20,10 @@ exports.Assets = (function() {
       appDir: process.cwd(),
       publicDir: "public",
       mode: (process.env.NODE_ENV === "production" ? "production" : "development"),
+      minify: true,
+      uglifyOpts: {
+        mangle: false
+      },
       assets: {
         js: {
           all: this.js.getAll()

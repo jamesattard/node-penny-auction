@@ -23,10 +23,10 @@ exports.MainPageController = (function(_super) {
   MainPageController.prototype.index = function(req, res) {
     var viewName;
     viewName = this._getViewName();
+    this._assets.css.addFile("font-awesome");
     this._assets.js.addFile("auction");
     this._assets.js.addFile("" + viewName);
     this._assets.compile();
-    console.log("@_assets.renderCss()", this._assets.renderCss());
     return Model.instanceOf('auction').findAll().then((function(_this) {
       return function(auctions) {
         var userPromise;

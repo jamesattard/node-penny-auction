@@ -6,7 +6,7 @@ exports.config = (app)->
     app.get("env") is 'development'
     config =
       baseUrl:
-        val: 'http://localhost:3000'
+        val: 'http://localhost:8001'
         allowInFrontend: true
       apiRoot:
         val: 'api'

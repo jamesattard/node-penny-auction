@@ -5,7 +5,7 @@ exports.config = function(app) {
     app.get("env") === 'development';
     config = {
       baseUrl: {
-        val: 'http://localhost:3000',
+        val: 'http://localhost:8001',
         allowInFrontend: true
       },
       apiRoot: {

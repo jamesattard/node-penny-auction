@@ -21,6 +21,7 @@ class exports.MainPageController extends FrontendController
 
     viewName = @_getViewName()
 #    @_assets.css.addUrl("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css")
+    @_assets.css.addFile("font-awesome")
     @_assets.js.addFile("auction")
     @_assets.js.addFile("#{viewName}")
 
@@ -40,7 +41,7 @@ class exports.MainPageController extends FrontendController
 #    .fail (e)-> console.log e.toJson()
 
     @_assets.compile()
-    console.log "@_assets.renderCss()", @_assets.renderCss()
+
     #get view name here since the _getViewName uses function-caller's name to build view name
     Model.instanceOf('auction').findAll().then( (auctions)=>
       userPromise = @get('userPromise')

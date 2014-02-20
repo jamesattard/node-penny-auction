@@ -7,7 +7,7 @@ Auction = (function() {
   }
 
   Auction.prototype.init = function() {
-    this._socket = io.connect('http://localhost:3000');
+    this._socket = io.connect(appConfig.config.baseUrl);
     this._findElements();
     this._attachEvents();
     this._attachListeners();

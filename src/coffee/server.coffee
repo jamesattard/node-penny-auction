@@ -18,6 +18,7 @@ global.configs = require('./application/configs')(app)
 
 CoreController.setStatic 'app', app
 CoreController.setStatic 'appRoot', __dirname
+#console.log __dirname
 
 #NODE_ENV=production node server.js
 console.log "ENV: ", app.get("env")
