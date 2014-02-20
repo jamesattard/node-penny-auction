@@ -4,7 +4,8 @@ Module dependencies.
 #global._ = require "underscore"
 
 # Core
-{CoreController} = require './core'
+{CoreController, RrsCore} = require './core'
+global.RrsCore = RrsCore
 
 # Express-genereted requires
 express = require("express")
@@ -85,10 +86,10 @@ CoreController.setStatic 'srv', srv
 srv.listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
 
-
 #include routes configuration file
 routes = require("./application/routes.js")(app)
 require("./application/listeners")(io)
+
 
 
 try

@@ -26,26 +26,26 @@ exports.SessionController = (function(_super) {
       return function(user) {
         var response;
         req.session.userId = user._id;
-        Helper.json.setIsUserAuthed(true);
-        response = Helper.json.render();
+        _this.get('json').setIsUserAuthed(true);
+        response = _this.get('json').render();
         return res.json(response);
       };
     })(this)).fail(function(e) {
       var response;
       console.log(e.toJson());
-      Helper.json.setSuccess(false);
-      Helper.json.setIsUserAuthed(false);
-      Helper.json.addMessage(e.toJson());
-      response = Helper.json.render();
+      this.get('json').setSuccess(false);
+      this.get('json').setIsUserAuthed(false);
+      this.get('json').addMessage(e.toJson());
+      response = this.get('json').render();
       return res.json(response);
     });
   };
 
   SessionController.prototype.doLogout = function(req, res) {
     delete req.session.userId;
-    Helper.json.setSuccess(true);
-    Helper.json.setIsUserAuthed(false);
-    return res.json(Helper.json.render());
+    this.get('json').setSuccess(true);
+    this.get('json').setIsUserAuthed(false);
+    return res.json(this.get('json').render());
   };
 
   return SessionController;

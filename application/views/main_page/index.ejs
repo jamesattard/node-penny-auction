@@ -10,31 +10,33 @@
             <a title="Details" href="#"><img src="<%- auction.images[0] %>" alt="Black and red stylish computer case" /></a>
             <p><%- auction.title %></p>
         </div>
-        <p class="js-winner winner"><%- auction.lastBidder %></p>
+        <p><span  class="js-winner js-blinker winner blinker"><%- auction.lastBidder.username %></span></p>
         <div class="price-label">
             <strike>&euro;<%- auction.retailerPrice %></strike>
             <% startingPriceParts = String(auction.currentPrice).split('.') %>
             <p class="price">
+                <span class="js-blinker blinker">
                 &euro;<span class="js-int"><%- startingPriceParts[0]  %></span>
                       <sup><%- startingPriceParts[1].substr(0, 2)  %></sup>
+                </span>
             </p>
         </div>
         <span class="js-time-label time-label" data-secs-left="<%- getSecsDiffToDate(auction.endDate) %>"><i class="fa fa-clock-o"></i> <span>666d 18:20:32</span></span>
         <a class="js-do-bid-btn bid-btn">Bid!</a>
     </div>
     <% }) %>
-    <div class="product-holder">
-        <div class="product">
-            <a title="Details" href="#"><img src="images/case2.jpg" alt="Beautiful white case with flower motives" /></a>
-            <img class="sale-label" src="images/sale-label.png" alt="Sale!" />
-            <p>Case Model</p>
-        </div>
-        <p>Product 20</p>
-        <div class="price-label">
-            <strike>$117.50</strike>
-            <p class="price">£96.<sup>35</sup></p>
-        </div>
-    </div>
+    <!--<div class="product-holder">-->
+        <!--<div class="product">-->
+            <!--<a title="Details" href="#"><img src="images/case2.jpg" alt="Beautiful white case with flower motives" /></a>-->
+            <!--<img class="sale-label" src="images/sale-label.png" alt="Sale!" />-->
+            <!--<p>Case Model</p>-->
+        <!--</div>-->
+        <!--<p>Product 20</p>-->
+        <!--<div class="price-label">-->
+            <!--<strike>$117.50</strike>-->
+            <!--<p class="price">£96.<sup>35</sup></p>-->
+        <!--</div>-->
+    <!--</div>-->
 
 
     <div class="cl"></div>

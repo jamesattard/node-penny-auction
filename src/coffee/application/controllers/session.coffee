@@ -29,24 +29,24 @@ class exports.SessionController extends FrontendController
     Model.instanceOf('user').login(req.body.email, req.body.password).then( (user)=>
       req.session.userId = user._id
 
-      Helper.json.setIsUserAuthed true
-      response = Helper.json.render()
+      @get('json').setIsUserAuthed true
+      response = @get('json').render()
       res.json response
     )
     .fail (e)->
       console.log e.toJson()
-      Helper.json.setSuccess false
-      Helper.json.setIsUserAuthed false
-      Helper.json.addMessage e.toJson()
-      response = Helper.json.render()
+      @get('json').setSuccess false
+      @get('json').setIsUserAuthed false
+      @get('json').addMessage e.toJson()
+      response = @get('json').render()
       res.json response
 
 
   doLogout: (req, res)=>
     delete req.session.userId
-    Helper.json.setSuccess true
-    Helper.json.setIsUserAuthed false
-    res.json( Helper.json.render() )
+    @get('json').setSuccess true
+    @get('json').setIsUserAuthed false
+    res.json( @get('json').render() )
 
 
 

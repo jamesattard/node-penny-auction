@@ -3,19 +3,19 @@ module.exports = function(io) {
   return io.sockets.on('connection', function(socket) {
     var session;
     session = socket.handshake.session;
-    console.log('SESSION', session, session.userId);
     return Model.instanceOf('user').getById(session.userId).then(function(user) {
       return socket.on('do_bid', function(data) {
         console.log("BID DATA: ", data);
-        return Model.instanceOf('auction').doBid(data.id, user).then(function(auction) {
-          console.log(auction);
-          socket.emit('auction_updated', {
-            auction: auction
+        if (user) {
+          return Model.instanceOf('auction').doBid(data.id, user).then(function(auction) {
+            socket.emit('auction_updated', {
+              auction: auction
+            });
+            return socket.broadcast.emit('auction_updated', {
+              auction: auction
+            });
           });
-          return socket.broadcast.emit('auction_updated', {
-            auction: auction
-          });
-        });
+        }
       });
     }).fail(function(e) {
       return socket.emit('auction_updated', {

@@ -31,7 +31,15 @@ class Auction
       startingPriceParts = String(data.auction.currentPrice).split('.')
       $auctionHolder.find('.price-label .price .js-int').text(startingPriceParts[0])
       $auctionHolder.find('.price-label .price sup').text(startingPriceParts[1].substr(0, 2))
-      $auctionHolder.find('.js-winner').text(data.auction.lastBidder)
+
+      $winnerHolder = $auctionHolder.find('.js-winner')
+      if $winnerHolder.find('.js-winner').text() != data.auction.lastBidder.username
+        $auctionHolder.find('.js-blinker').addClass 'blink'
+        setTimeout ->
+          $auctionHolder.find('.js-blinker').removeClass 'blink'
+        , 1000
+      console.log $winnerHolder.text()
+      $winnerHolder.text(data.auction.lastBidder.username)
 
 
 

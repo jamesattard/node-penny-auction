@@ -15,7 +15,7 @@ class exports.Auction extends Model.Mongo
     description:    String
     images:         [ String ]
     bidders:        [{userId: mongoose.Schema.ObjectId, username: String}]
-    lastBidder:     String
+    lastBidder:     { userId: mongoose.Schema.ObjectId, username: String}
     startingPrice:  Number
     currentPrice:   Number
     retailerPrice:  Number
@@ -71,6 +71,16 @@ class exports.Auction extends Model.Mongo
 
 
   doBid: (inAuctionId, inUser)->
+    @getById(inAuctionId).then (auction)=>
+      console.log "++++++++++++++", auction.lastBidder.userId.toHexString(), inUser._id.toHexString()
+      if auction.lastBidder.userId.toHexString() isnt inUser._id.toHexString()
+        return @_doBid(inAuctionId, inUser)
+      else
+        defer = Q.defer()
+        defer.resolve auction
+        return defer.promise
+
+  _doBid: (inAuctionId, inUser)->
     defer = Q.defer()
 
     options     = {}
@@ -78,11 +88,11 @@ class exports.Auction extends Model.Mongo
     bidder      =
       userId    : inUser.id
       username  : inUser.username
-      # @todo: add curent bid val
+    # @todo: add curent bid val
 
-    update      =
+    update =
       $addToSet: {bidders: bidder }
-      lastBidder: inUser.username
+      lastBidder: {userId: inUser._id, username: inUser.username}
       $inc: {currentPrice: 0.01 }
     @getMongooseModel().update conditions, update, options, (err, affected)->
       if err
@@ -92,7 +102,6 @@ class exports.Auction extends Model.Mongo
 
     defer.promise.then ()=>
       @getById(inAuctionId)
-
 
 
 

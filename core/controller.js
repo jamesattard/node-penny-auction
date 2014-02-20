@@ -15,12 +15,8 @@ exports.CoreController = (function() {
   }
 
   CoreController.preprocessRequest = function(req, res, next) {
-    _params['assets'] = {
-      js: piler.createJSManager(),
-      css: piler.createCSSManager()
-    };
-    _params['assets'].js.bind(_params['app'], _params['srv']);
-    return _params['assets'].css.bind(_params['app'], _params['srv']);
+    _params['assets'] = RrsCore.Helpers.Assets.factory();
+    return _params['json'] = RrsCore.Helpers.Json.factory();
   };
 
   CoreController.prototype.set = function(inName, inVal) {

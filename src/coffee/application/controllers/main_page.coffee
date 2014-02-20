@@ -17,11 +17,12 @@ class exports.MainPageController extends FrontendController
 
 
   index: (req, res)=>
-    appRoot = FrontendController.getStatic('appRoot')
+#    appRoot = FrontendController.getStatic('appRoot')
+
     viewName = @_getViewName()
-    @_assets.css.addUrl("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css")
-    @_assets.js.addFile(appRoot + "/public/javascripts/auction.js")
-    @_assets.js.addFile(appRoot + "/public/javascripts/#{viewName}.js")
+#    @_assets.css.addUrl("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css")
+    @_assets.js.addFile("auction")
+    @_assets.js.addFile("#{viewName}")
 
 #    auctionData =
 #      title:          "iPod touch"
@@ -38,16 +39,16 @@ class exports.MainPageController extends FrontendController
 #    )
 #    .fail (e)-> console.log e.toJson()
 
-
+    @_assets.compile()
+    console.log "@_assets.renderCss()", @_assets.renderCss()
     #get view name here since the _getViewName uses function-caller's name to build view name
     Model.instanceOf('auction').findAll().then( (auctions)=>
-      console.log auctions
       userPromise = @get('userPromise')
       if userPromise
         userPromise.then (user)=>
           res.render viewName,
-            jsTags  : @_assets.js.renderTags()
-            cssTags : @_assets.css.renderTags()
+            jsTags  : @_assets.renderJs()
+            cssTags : @_assets.renderCss()
             auctions: auctions
             getSecsDiffToDate: getSecsDiffToDate
             configs: configs.getFrontendConfigs()
@@ -55,8 +56,8 @@ class exports.MainPageController extends FrontendController
         .fail (e)-> console.log e.toJson()
       else
         res.render viewName,
-          jsTags  : @_assets.js.renderTags()
-          cssTags : @_assets.css.renderTags()
+          jsTags  : @_assets.renderJs()
+          cssTags : @_assets.renderCss()
           auctions: auctions
           getSecsDiffToDate: getSecsDiffToDate
           configs: configs.getFrontendConfigs()

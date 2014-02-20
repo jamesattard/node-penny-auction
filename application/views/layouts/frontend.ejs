@@ -18,7 +18,7 @@
 <!-- Header -->
 <div id="header">
     <!-- Search  -->
-    <div id="search">
+   <!-- <div id="search">
         <div class="search-holder">
             <form action="" method="post">
                 <input type="text" class="field" value="Keywords" title="Keywords" />
@@ -27,7 +27,7 @@
             <a class="advanced-search" title="Advanced Search" href="#">Advanced Search</a>
             <div class="cl"></div>
         </div>
-    </div>
+    </div> -->
     <!-- END Search -->
     <div class="cl"></div>
     <!-- Logo -->
@@ -89,6 +89,18 @@
 <!-- Main  -->
 <div id="main">
 
+<div class="alert">
+    <h4>This is simple <i>DEMO</i> version of penny auction build with Node.js/MongoDB/Socket.io</h4>
+    <p>Unfortunatelly, registration is not implemented (since this is a demo <i class="fa fa-smile-o"></i>  ). Please, use following info to login and test
+    bids
+    <ol>
+        <li>Email: <b>peter@example.com</b>, pass: <b>12345678</b></li>
+        <li>Email: <b>ana@example.com, pass: <b>12345678</b></li>
+        <li>Email: <b>alex.lee@example.com, pass: <b>12345678</b></li>
+    </ol>
+    </p>
+</div>
+
 <%- body %>
 
 
@@ -97,41 +109,24 @@
     <div id="footer-top"></div>
     <div id="footer-middle">
         <div class="col styles">
-            <h3>Styles</h3>
-            <ul>
-                <li><a title="gamer" href="#"><span class="bullet"></span>gamer</a></li>
-                <li><a title="abstract" href="#"><span class="bullet"></span>abstract</a></li>
-                <li><a title="retro" href="#"><span class="bullet"></span>retro</a></li>
-                <li><a title="hi tech" href="#"><span class="bullet"></span>hi tech</a></li>
-                <li><a title="for children" href="#"><span class="bullet"></span>for children</a></li>
-                <li><a title="for ladies" href="#"><span class="bullet"></span>for ladies</a></li>
-            </ul>
+            <h3>&nbsp;</h3>
         </div>
         <div class="col info">
-            <h3>Information</h3>
+            <h3>Contact info</h3>
             <ul>
-                <li><a title="About MEGAStore" href="#"><span class="bullet"></span>About MEGAStore</a></li>
-                <li><a title="Privacy Policy" href="#"><span class="bullet"></span>Privacy Policy</a></li>
-                <li><a title="Terms &amp; Conditions" href="#"><span class="bullet"></span>Terms &amp; Conditions</a></li>
-                <li><a title="Contact Us" href="#"><span class="bullet"></span>Contact Us</a></li>
-                <li><a title="Site Map" href="#"><span class="bullet"></span>Site Map</a></li>
+                <li><a title="gamer" href="https://github.com/apedyashev/node-penny-auction"><i class="fa fa-github"></i> Github</a></li>
+                <li><a title="abstract" href="http://linkedin.com/pub/alexey-pedyashev/46/62/a76/"><i class="fa fa-linkedin-square"></i> LinkedId</a></li>
             </ul>
         </div>
         <div class="col newsletter">
-            <h3>Newsletter</h3>
-            <p>NO SPAM! Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            <form action="" method="post">
-                <div class="field-holder"><input type="text" class="field" value="Enter Your Email" title="Enter Your Email" /></div>
-                <div class="cl"></div>
-                <input type="checkbox" name="check-box" value="" id="check-box" />
-                <label for="check-box">Lorem ipsum dolor sit amet, consectetur </label>
-                <input type="submit" value="submit" class="submit-button" />
-            </form>
+            <h3>About</h3>
+            <p>Simple penny auction demo. Can be <b>improved</b> for your needs</p>
         </div>
         <div class="cl"></div>
     </div>
     <div id="footer-bottom">
-        <p>&copy; MegaStore. Design by <a href="http://css-free-templates.com/">CSS-FREE-TEMPLATES.COM</a></p>
+        <p class="text-center">&copy; Alexey Pedyashev (2014)</p>
+        <p  class="text-center megastore-copy">&copy; MegaStore. Design by <a href="http://css-free-templates.com/">CSS-FREE-TEMPLATES.COM</a></p>
     </div>
 </div>
 <!-- END Footer -->
@@ -139,7 +134,7 @@
 <!-- END Main -->
 </div>
 
-    <div id="login-modal">
+    <div id="login-modal"  style="display:none">
         <form id="login-form" method="post" >
             <div class="row">
                 <label class="control-label span3">Email:</label>

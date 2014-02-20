@@ -601,6 +601,14 @@ a.buy-now {
     color: #fff;
     font-weight: bold;
   }
+
+  .blink{
+    background-color: $primary-color !important;
+  }
+  .blinker{
+    padding: 3px;
+    border-radius: 5px;
+  }
 }
 
 .product {
@@ -742,13 +750,16 @@ a.buy-now {
   height: 74px;
   background: url(/images/footer-bottom.png) no-repeat 0 bottom;
   p {
-    position: absolute;
+    //position: absolute;
     bottom: 11px;
     right: 0;
     color: #c1c1c1;
     a {
       color: #c1c1c1;
     }
+  }
+  .megastore-copy{
+    font-size: 8px;
   }
 }
 
@@ -946,4 +957,23 @@ form{
 
 .hidden{
   display: none;
+}
+
+.alert{
+  color: #e3e3e3;
+  border-radius: 5px;
+  border: 1px solid #6e6e6e;
+  background-color: $primary-color;
+  padding: 8px;
+  ol{
+    margin: 20px;
+  }
+}
+
+.text-center{
+  text-align: center;
+}
+
+.text-right{
+  text-align: right;
 }

@@ -3,9 +3,11 @@
 /*
 Module dependencies.
  */
-var CoreController, app, connect, cookie, e, engine, express, http, initializers, io, path, routes, srv;
+var CoreController, RrsCore, app, connect, cookie, e, engine, express, http, initializers, io, path, routes, srv, _ref;
 
-CoreController = require('./core').CoreController;
+_ref = require('./core'), CoreController = _ref.CoreController, RrsCore = _ref.RrsCore;
+
+global.RrsCore = RrsCore;
 
 express = require("express");
 

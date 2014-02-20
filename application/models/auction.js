@@ -24,7 +24,10 @@ exports.Auction = (function(_super) {
         username: String
       }
     ],
-    lastBidder: String,
+    lastBidder: {
+      userId: mongoose.Schema.ObjectId,
+      username: String
+    },
     startingPrice: Number,
     currentPrice: Number,
     retailerPrice: Number,
@@ -64,6 +67,22 @@ exports.Auction = (function(_super) {
   };
 
   Auction.prototype.doBid = function(inAuctionId, inUser) {
+    return this.getById(inAuctionId).then((function(_this) {
+      return function(auction) {
+        var defer;
+        console.log("++++++++++++++", auction.lastBidder.userId.toHexString(), inUser._id.toHexString());
+        if (auction.lastBidder.userId.toHexString() !== inUser._id.toHexString()) {
+          return _this._doBid(inAuctionId, inUser);
+        } else {
+          defer = Q.defer();
+          defer.resolve(auction);
+          return defer.promise;
+        }
+      };
+    })(this));
+  };
+
+  Auction.prototype._doBid = function(inAuctionId, inUser) {
     var bidder, conditions, defer, options, update;
     defer = Q.defer();
     options = {};
@@ -78,7 +97,10 @@ exports.Auction = (function(_super) {
       $addToSet: {
         bidders: bidder
       },
-      lastBidder: inUser.username,
+      lastBidder: {
+        userId: inUser._id,
+        username: inUser.username
+      },
       $inc: {
         currentPrice: 0.01
       }

@@ -21,22 +21,21 @@ exports.MainPageController = (function(_super) {
   };
 
   MainPageController.prototype.index = function(req, res) {
-    var appRoot, viewName;
-    appRoot = FrontendController.getStatic('appRoot');
+    var viewName;
     viewName = this._getViewName();
-    this._assets.css.addUrl("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css");
-    this._assets.js.addFile(appRoot + "/public/javascripts/auction.js");
-    this._assets.js.addFile(appRoot + ("/public/javascripts/" + viewName + ".js"));
+    this._assets.js.addFile("auction");
+    this._assets.js.addFile("" + viewName);
+    this._assets.compile();
+    console.log("@_assets.renderCss()", this._assets.renderCss());
     return Model.instanceOf('auction').findAll().then((function(_this) {
       return function(auctions) {
         var userPromise;
-        console.log(auctions);
         userPromise = _this.get('userPromise');
         if (userPromise) {
           return userPromise.then(function(user) {
             return res.render(viewName, {
-              jsTags: _this._assets.js.renderTags(),
-              cssTags: _this._assets.css.renderTags(),
+              jsTags: _this._assets.renderJs(),
+              cssTags: _this._assets.renderCss(),
               auctions: auctions,
               getSecsDiffToDate: getSecsDiffToDate,
               configs: configs.getFrontendConfigs(),
@@ -47,8 +46,8 @@ exports.MainPageController = (function(_super) {
           });
         } else {
           return res.render(viewName, {
-            jsTags: _this._assets.js.renderTags(),
-            cssTags: _this._assets.css.renderTags(),
+            jsTags: _this._assets.renderJs(),
+            cssTags: _this._assets.renderCss(),
             auctions: auctions,
             getSecsDiffToDate: getSecsDiffToDate,
             configs: configs.getFrontendConfigs(),

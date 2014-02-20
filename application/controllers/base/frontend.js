@@ -17,25 +17,24 @@ exports.FrontendController = (function(_super) {
   }
 
   FrontendController.preprocessRequest = function(req, res, next) {
-    var appRoot, userPromise;
+    var userPromise;
     FrontendController.__super__.constructor.preprocessRequest.apply(this, arguments);
-    appRoot = FrontendController.getStatic('appRoot');
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/jquery-1.7.min.js");
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/jquery.jcarousel.js");
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/prettyCheckboxes.js");
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/DD_belatedPNG-min.js");
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/functions.js");
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/spin.min.js");
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/helpers.js");
-    FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/layout.js");
-    FrontendController.getStatic('assets').css.addFile(appRoot + "/public/stylesheets/style.css");
-    FrontendController.getStatic('assets').css.addFile(appRoot + "/public/stylesheets/prettyCheckboxes.css");
+    FrontendController.getStatic('assets').js.addFile("lib/jquery-1.7.min");
+    FrontendController.getStatic('assets').js.addFile("lib/jquery.jcarousel");
+    FrontendController.getStatic('assets').js.addFile("lib/prettyCheckboxes");
+    FrontendController.getStatic('assets').js.addFile("lib/DD_belatedPNG-min");
+    FrontendController.getStatic('assets').js.addFile("lib/functions");
+    FrontendController.getStatic('assets').js.addFile("lib/spin.min");
+    FrontendController.getStatic('assets').js.addFile("lib/helpers");
+    FrontendController.getStatic('assets').js.addFile("layout");
+    FrontendController.getStatic('assets').css.addFile("style");
+    FrontendController.getStatic('assets').css.addFile("prettyCheckboxes");
     userPromise = self.getStatic('userPromise');
     if (!userPromise) {
-      FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/jquery.fancybox.pack.js");
-      FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/lib/jquery.validate.min.js");
-      FrontendController.getStatic('assets').js.addFile(appRoot + "/public/javascripts/user-session.js");
-      FrontendController.getStatic('assets').css.addFile(appRoot + "/public/stylesheets/jquery.fancybox.css");
+      FrontendController.getStatic('assets').js.addFile("lib/jquery.fancybox.pack");
+      FrontendController.getStatic('assets').js.addFile("lib/jquery.validate.min");
+      FrontendController.getStatic('assets').js.addFile("user-session");
+      FrontendController.getStatic('assets').css.addFile("jquery.fancybox");
     }
     if (next != null) {
       return next();
