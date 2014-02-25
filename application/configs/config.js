@@ -2,7 +2,6 @@
 exports.config = function(app) {
   var config;
   if ((app != null) && app.get("env") === 'production') {
-    app.get("env") === 'development';
     config = {
       baseUrl: {
         val: 'http://node-auc.rrs-lab.com',

@@ -3,7 +3,7 @@ exports.config = (app)->
   # PRODUCTION settings
   #
   if app? and app.get("env") is 'production'
-    app.get("env") is 'development'
+#    app.get("env") is 'development'
     config =
       baseUrl:
         val: 'http://node-auc.rrs-lab.com'
