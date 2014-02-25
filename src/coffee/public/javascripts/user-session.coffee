@@ -6,7 +6,7 @@ class UserSession
     @_findElements()
     @_attachFormValidation()
 
-    $("#login").fancybox
+    $(".js-login").fancybox
       maxWidth	: 400,
       maxHeight	: 300,
       fitToView	: false,

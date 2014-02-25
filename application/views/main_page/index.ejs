@@ -22,7 +22,11 @@
             </p>
         </div>
         <span class="js-time-label time-label" data-secs-left="<%- getSecsDiffToDate(auction.endDate) %>"><i class="fa fa-clock-o"></i> <span>666d 18:20:32</span></span>
-        <a class="js-do-bid-btn bid-btn">Bid!</a>
+        <% if(user){ %>
+        <a class="js-do-bid-btn  bid-btn" >Bid!</a>
+        <% }else{ %>
+        <a class="js-do-bid-btn  js-login bid-btn" href="#login-modal">Bid!</a>
+        <% } %>
     </div>
     <% }) %>
     <!--<div class="product-holder">-->

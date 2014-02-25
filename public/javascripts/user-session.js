@@ -9,7 +9,7 @@ UserSession = (function() {
   UserSession.prototype.init = function() {
     this._findElements();
     this._attachFormValidation();
-    return $("#login").fancybox({
+    return $(".js-login").fancybox({
       maxWidth: 400,
       maxHeight: 300,
       fitToView: false,
