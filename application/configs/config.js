@@ -12,7 +12,7 @@ exports.config = function(app) {
         val: 'api',
         allowInFrontend: true
       },
-      appPort: 8001
+      appPort: 8002
     };
   } else {
     config = {
