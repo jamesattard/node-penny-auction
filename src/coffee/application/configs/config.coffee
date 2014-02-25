@@ -6,7 +6,7 @@ exports.config = (app)->
     app.get("env") is 'development'
     config =
       baseUrl:
-        val: 'http://localhost:8001'
+        val: 'http://node-auc.rrs-lab.com:8001'
         allowInFrontend: true
       apiRoot:
         val: 'api'
