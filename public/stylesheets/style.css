@@ -127,6 +127,14 @@ textarea {
             height: 13px;
             margin-top: 7px;
             background: url(/images/cart.png) no-repeat 0 0; }
+  #top-navigation .separator {
+    width: 0px;
+    height: 5px;
+    background-color: #ffc800;
+    border-radius: 8px;
+    margin: 12px 0 0 8px; }
+  #top-navigation span {
+    color: #7dbf0d; }
 
 .search-holder {
   width: 170px;

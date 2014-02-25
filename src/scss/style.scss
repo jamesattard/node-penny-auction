@@ -159,6 +159,18 @@ textarea {
       }
     }
   }
+
+  .separator{
+    width: 0px;
+    height: 5px;
+    background-color: $secondary-color;
+    border-radius: 8px;
+    margin: 12px 0 0 8px;
+  }
+
+  span{
+    color: $primary-color;
+  }
 }
 
 .search-holder {
@@ -968,6 +980,7 @@ form{
   ol{
     margin: 20px;
   }
+
 }
 
 .text-center{
