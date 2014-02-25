@@ -1,7 +1,12 @@
+# File: src/coffee/application/controllers/main_page.coffee
 
-FrontendController = require('./base/frontend').FrontendController
-Model = require('../../core/models').Model
+FrontendController  = require('./base/frontend').FrontendController
+Model               = require('../../core/models').Model
 
+# Controller to serve main page
+#
+# @author   Alexey Pedyashev <alexey.pedyashev@gmail.com>
+#
 class exports.MainPageController extends FrontendController
   constructor: ->
     super
@@ -16,29 +21,13 @@ class exports.MainPageController extends FrontendController
     super
 
 
+  # Renders main page
   index: (req, res)=>
-#    appRoot = FrontendController.getStatic('appRoot')
 
     viewName = @_getViewName()
-#    @_assets.css.addUrl("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css")
     @_assets.css.addFile("font-awesome")
     @_assets.js.addFile("auction")
     @_assets.js.addFile("#{viewName}")
-
-#    auctionData =
-#      title:          "iPod touch"
-#      description:    "iPod touch description"
-#      images:         ["https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSC5N7RemEVUvZne55CvHOKwQRaCHgsZiJxvtSAl9mk9vFq12Sp"]
-#      bidders:        [{}]
-#      startingPrice:  5.1
-#      retailerPrice:  99.99
-#      startDate:      new Date(2014, 0, 30, 15, 15)
-#      endDate:        new Date(2017, 5, 15, 12)
-#
-#    Model.instanceOf('auction').save(auctionData).then( ->
-#      console.log 'saved'
-#    )
-#    .fail (e)-> console.log e.toJson()
 
     @_assets.compile()
 
@@ -69,6 +58,21 @@ class exports.MainPageController extends FrontendController
     .fail (e)-> console.log e.toJson()
 
 
+#  createTestAuction: ->
+#    auctionData =
+#      title:          "iPod touch"
+#      description:    "iPod touch description"
+#      images:         ["https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSC5N7RemEVUvZne55CvHOKwQRaCHgsZiJxvtSAl9mk9vFq12Sp"]
+#      bidders:        [{}]
+#      startingPrice:  5.1
+#      retailerPrice:  99.99
+#      startDate:      new Date(2014, 0, 30, 15, 15)
+#      endDate:        new Date(2017, 5, 15, 12)
+#
+#    Model.instanceOf('auction').save(auctionData).then( ->
+#      console.log 'saved'
+#    )
+#    .fail (e)-> console.log e.toJson()
 
 
 

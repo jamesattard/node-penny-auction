@@ -1,3 +1,6 @@
+# !!!! NOT USED YET BY THIS PROJECT !!!!
+
+
 class exports.Initializer
   constructor: (app)->
     #import modules

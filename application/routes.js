@@ -5,7 +5,7 @@ MainPageController = require('./controllers/main_page').MainPageController;
 
 SessionController = require('./controllers/session').SessionController;
 
-apiPrefix = 'api';
+apiPrefix = configs.config.apiRoot.val;
 
 module.exports = function(app) {
   app.get("/", MainPageController.preprocessRequest, function(req, resp) {

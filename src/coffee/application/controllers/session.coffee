@@ -1,7 +1,12 @@
+# File: src/coffee/application/controllers/session.coffee
 
-FrontendController = require('./base/frontend').FrontendController
-Model = require('../../core/models').Model
+FrontendController  = require('./base/frontend').FrontendController
+Model               = require('../../core/models').Model
 
+# Controller to handle session
+#
+# @author   Alexey Pedyashev <alexey.pedyashev@gmail.com>
+#
 class exports.SessionController extends FrontendController
   constructor: ->
     super
@@ -16,6 +21,8 @@ class exports.SessionController extends FrontendController
     super
 
 
+  # Performs user login. Replies with JSON in format of Core::Helpers::json
+  #
   doLogin: (req, res)=>
     Model.instanceOf('user').login(req.body.email, req.body.password).then( (user)=>
       req.session.userId = user._id
@@ -32,6 +39,8 @@ class exports.SessionController extends FrontendController
       res.json response
 
 
+  # Performs user logout. Replies with JSON in format of Core::Helpers::json
+  #
   doLogout: (req, res)=>
     delete req.session.userId
     @get('json').setSuccess true

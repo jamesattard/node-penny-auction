@@ -12,7 +12,6 @@ module.exports = function(io) {
         console.log("BID DATA: ", data);
         if (user) {
           return Model.instanceOf('auction').doBid(data.id, user).then(function(bidResult) {
-            console.log('**************', bidResult);
             socket.emit('auction_updated', {
               auction: bidResult.auction
             });
