@@ -36,6 +36,7 @@ exports.Auction = (function(_super) {
   };
 
   function Auction() {
+    this._hiddenFields = ['bidders'];
     Auction.__super__.constructor.call(this, _schemaDescription);
   }
 

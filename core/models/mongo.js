@@ -62,7 +62,7 @@ MongoModel = (function(_super) {
     defer = Q.defer();
     this.getMongooseModel().findOne({
       '_id': id
-    }).exec(function(err, result) {
+    }, this._allowedFields).exec(function(err, result) {
       if (err) {
         return defer.reject(new ExceptionUserMessage("error", "Unable to read entry from DB"));
       } else {

@@ -24,7 +24,7 @@ class exports.Auction extends Model.Mongo
 
   constructor: ->
     #fields which shouldn't be read from DB
-#    @_hiddenFields = []
+    @_hiddenFields = ['bidders']
 
     #call parent class' constuctor
     super(_schemaDescription)
