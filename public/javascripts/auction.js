@@ -7,7 +7,9 @@ Auction = (function() {
   }
 
   Auction.prototype.init = function() {
-    this._socket = io.connect(appConfig.config.baseUrl);
+    this._socket = io.connect(appConfig.config.baseUrl, {
+      port: appConfig.config.appPort
+    });
     this._events = {
       errorOccured: 'error_occured',
       auctionUpdated: 'auction_updated',

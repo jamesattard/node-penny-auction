@@ -5,14 +5,17 @@ exports.config = function(app) {
     app.get("env") === 'development';
     config = {
       baseUrl: {
-        val: 'http://node-auc.rrs-lab.com:8001',
+        val: 'http://node-auc.rrs-lab.com',
         allowInFrontend: true
       },
       apiRoot: {
         val: 'api',
         allowInFrontend: true
       },
-      appPort: 8002
+      appPort: {
+        val: 8002,
+        allowInFrontend: true
+      }
     };
   } else {
     config = {
@@ -24,7 +27,10 @@ exports.config = function(app) {
         val: 'api',
         allowInFrontend: true
       },
-      appPort: 3000
+      appPort: {
+        val: 3000,
+        allowInFrontend: true
+      }
     };
   }
   return config;

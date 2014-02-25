@@ -33,6 +33,7 @@ exports.Assets = (function() {
         }
       }
     });
+    nap["package"]();
     return this;
   };
 

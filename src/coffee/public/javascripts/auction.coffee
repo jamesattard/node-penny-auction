@@ -3,7 +3,7 @@ class Auction
     @init()
 
   init: ->
-    @_socket = io.connect(appConfig.config.baseUrl)
+    @_socket = io.connect(appConfig.config.baseUrl, {port: appConfig.config.appPort})
 
     @_events =
       errorOccured    : 'error_occured'

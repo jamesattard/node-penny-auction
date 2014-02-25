@@ -6,12 +6,14 @@ exports.config = (app)->
     app.get("env") is 'development'
     config =
       baseUrl:
-        val: 'http://node-auc.rrs-lab.com:8001'
+        val: 'http://node-auc.rrs-lab.com'
         allowInFrontend: true
       apiRoot:
         val: 'api'
         allowInFrontend: true
-      appPort: 8002
+      appPort:
+        val: 8002
+        allowInFrontend: true
 
 
   #
@@ -25,7 +27,9 @@ exports.config = (app)->
       apiRoot:
         val: 'api'
         allowInFrontend: true
-      appPort: 3000
+      appPort:
+        val: 3000
+        allowInFrontend: true
 
 
   return config

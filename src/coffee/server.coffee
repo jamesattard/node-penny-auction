@@ -26,7 +26,7 @@ console.log "ENV: ", app.get("env")
 initializers = require('./application/initializers')(app)
 
 # all environments
-app.set "port", process.env.PORT or configs.config.appPort
+app.set "port", process.env.PORT or configs.config.appPort.val
 app.set "views", path.join(__dirname, "application/views")
 app.engine('ejs', engine)
 app.set "view engine", "ejs"
