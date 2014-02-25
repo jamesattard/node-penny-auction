@@ -5,6 +5,11 @@ class Auction
   init: ->
     @_socket = io.connect(appConfig.config.baseUrl)
 
+    @_events =
+      errorOccured    : 'error_occured'
+      auctionUpdated  : 'auction_updated'
+      tokensUpdated   : 'tokens_updated'
+
     @_findElements()
     @_attachEvents()
     @_attachListeners()
@@ -15,17 +20,20 @@ class Auction
     , 1000
 
   _findElements: ->
-    @_$doBidBtn   = $('.js-do-bid-btn')
-    @_$timeLabels = $('.js-time-label')
+    @_$doBidBtn     = $('.js-do-bid-btn')
+    @_$timeLabels   = $('.js-time-label')
+    @_$tokensCount  = $('#tokens-count')
 
   _attachEvents: ->
     @_attachDoBidBtnClick()
 
   _attachListeners: ->
     @_attachAuctionUpdatedListener()
+    @_attachErrorOccuredEventListener()
+    @_attachTokensUpdatedEventListener()
 
   _attachAuctionUpdatedListener: ->
-    @_socket.on 'auction_updated',  (data)=>
+    @_socket.on @_events.auctionUpdated,  (data)=>
       console.log(data)
       $auctionHolder = $(".js-live-auction[data-auction-id=#{data.auction._id}]")
       startingPriceParts = String(data.auction.currentPrice).split('.')
@@ -33,7 +41,7 @@ class Auction
       $auctionHolder.find('.price-label .price sup').text(startingPriceParts[1].substr(0, 2))
 
       $winnerHolder = $auctionHolder.find('.js-winner')
-      if $winnerHolder.find('.js-winner').text() != data.auction.lastBidder.username
+      if $winnerHolder.text() != data.auction.lastBidder.username
         $auctionHolder.find('.js-blinker').addClass 'blink'
         setTimeout ->
           $auctionHolder.find('.js-blinker').removeClass 'blink'
@@ -42,7 +50,13 @@ class Auction
       $winnerHolder.text(data.auction.lastBidder.username)
 
 
+  _attachErrorOccuredEventListener: ->
+    @_socket.on @_events.errorOccured, (data)=>
+      alert 'Error:' + data.message
 
+  _attachTokensUpdatedEventListener: ->
+    @_socket.on @_events.tokensUpdated, (data)=>
+      @_$tokensCount.text data.tokens
 
   _attachDoBidBtnClick: ->
     @_$doBidBtn.unbind 'click'

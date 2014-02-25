@@ -67,15 +67,25 @@ exports.Auction = (function(_super) {
   };
 
   Auction.prototype.doBid = function(inAuctionId, inUser) {
-    return this.getById(inAuctionId).then((function(_this) {
-      return function(auction) {
+    return Model.instanceOf('user').getTokens(inUser._id).then((function(_this) {
+      return function(tokens) {
         var defer;
-        console.log("++++++++++++++", auction.lastBidder.userId.toHexString(), inUser._id.toHexString());
-        if (auction.lastBidder.userId.toHexString() !== inUser._id.toHexString()) {
-          return _this._doBid(inAuctionId, inUser);
+        if (tokens > 0) {
+          return _this.getById(inAuctionId).then(function(auction) {
+            var defer;
+            if (auction.lastBidder.userId.toHexString() !== inUser._id.toHexString()) {
+              return _this._doBid(inAuctionId, inUser);
+            } else {
+              defer = Q.defer();
+              defer.resolve({
+                auction: auction
+              });
+              return defer.promise;
+            }
+          });
         } else {
           defer = Q.defer();
-          defer.resolve(auction);
+          defer.reject(new ExceptionUserMessage("error", "You do not have tokens to continue bidding"));
           return defer.promise;
         }
       };
@@ -90,17 +100,14 @@ exports.Auction = (function(_super) {
       "_id": inAuctionId
     };
     bidder = {
-      userId: inUser.id,
+      userId: inUser._id,
       username: inUser.username
     };
     update = {
       $addToSet: {
         bidders: bidder
       },
-      lastBidder: {
-        userId: inUser._id,
-        username: inUser.username
-      },
+      lastBidder: bidder,
       $inc: {
         currentPrice: 0.01
       }
@@ -114,7 +121,18 @@ exports.Auction = (function(_super) {
     });
     return defer.promise.then((function(_this) {
       return function() {
-        return _this.getById(inAuctionId);
+        return Model.instanceOf('user').decrementTokens(inUser._id).then(function(tokens) {
+          return _this.getById(inAuctionId).then(function(auction) {
+            var data, defer1;
+            defer1 = Q.defer();
+            data = {
+              auction: auction,
+              tokens: tokens
+            };
+            defer1.resolve(data);
+            return defer1.promise;
+          });
+        });
       };
     })(this));
   };

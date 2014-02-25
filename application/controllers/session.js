@@ -30,15 +30,16 @@ exports.SessionController = (function(_super) {
         response = _this.get('json').render();
         return res.json(response);
       };
-    })(this)).fail(function(e) {
-      var response;
-      console.log(e.toJson());
-      this.get('json').setSuccess(false);
-      this.get('json').setIsUserAuthed(false);
-      this.get('json').addMessage(e.toJson());
-      response = this.get('json').render();
-      return res.json(response);
-    });
+    })(this)).fail((function(_this) {
+      return function(e) {
+        var response;
+        _this.get('json').setSuccess(false);
+        _this.get('json').setIsUserAuthed(false);
+        _this.get('json').addMessage(e.toJson());
+        response = _this.get('json').render();
+        return res.json(response);
+      };
+    })(this));
   };
 
   SessionController.prototype.doLogout = function(req, res) {

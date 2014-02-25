@@ -71,14 +71,21 @@ class exports.Auction extends Model.Mongo
 
 
   doBid: (inAuctionId, inUser)->
-    @getById(inAuctionId).then (auction)=>
-      console.log "++++++++++++++", auction.lastBidder.userId.toHexString(), inUser._id.toHexString()
-      if auction.lastBidder.userId.toHexString() isnt inUser._id.toHexString()
-        return @_doBid(inAuctionId, inUser)
+    Model.instanceOf('user').getTokens(inUser._id).then (tokens)=>
+      if tokens > 0
+        @getById(inAuctionId).then (auction)=>
+          if auction.lastBidder.userId.toHexString() isnt inUser._id.toHexString()
+            return @_doBid(inAuctionId, inUser)
+          else
+            defer = Q.defer()
+            defer.resolve auction: auction
+            return defer.promise
       else
         defer = Q.defer()
-        defer.resolve auction
-        return defer.promise
+        defer.reject new ExceptionUserMessage("error", "You do not have tokens to continue bidding")
+        defer.promise
+
+
 
   _doBid: (inAuctionId, inUser)->
     defer = Q.defer()
@@ -86,13 +93,13 @@ class exports.Auction extends Model.Mongo
     options     = {}
     conditions  = {"_id": inAuctionId}
     bidder      =
-      userId    : inUser.id
+      userId    : inUser._id
       username  : inUser.username
     # @todo: add curent bid val
 
     update =
       $addToSet: {bidders: bidder }
-      lastBidder: {userId: inUser._id, username: inUser.username}
+      lastBidder: bidder
       $inc: {currentPrice: 0.01 }
     @getMongooseModel().update conditions, update, options, (err, affected)->
       if err
@@ -100,8 +107,20 @@ class exports.Auction extends Model.Mongo
       else
         defer.resolve affected
 
-    defer.promise.then ()=>
-      @getById(inAuctionId)
+    defer.promise.then =>
+      Model.instanceOf('user').decrementTokens(inUser._id).then (tokens)=>
+        @getById(inAuctionId).then (auction)=>
+          defer1 = Q.defer()
+          data =
+            auction : auction
+            tokens  : tokens
+          defer1.resolve data
+
+          defer1.promise
+
+
+
+
 
 
 
@@ -114,6 +133,10 @@ class exports.Auction extends Model.Mongo
     @getMongooseModel().findOne({'email': inEmail}).exec (err, result)->
       isExist = result isnt null
       onComplete(isExist)
+
+
+
+
 
 
 

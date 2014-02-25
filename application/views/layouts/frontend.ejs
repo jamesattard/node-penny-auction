@@ -39,7 +39,7 @@
                 <li><a id="logout"><i class="fa fa-sign-out"></i> Logout</a></li>
                 <li><%- user.firstName %> <%- user.lastName %> (<%- user.username %>)</li>
                 <li class="separator"></li>
-                <li>0 tokens</li>
+                <li><span id="tokens-count" class="tokens-count">0</span> tokens</li>
             <% }else{ %>
             <li><a id="login" href="#login-modal" class="start" title="Login"><i class="fa fa-sign-in"></i> Login</a></li>
             <!-- <li><a id="register" class="end" title="Register" href="#">Register<span></span></a></li> -->

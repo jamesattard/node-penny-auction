@@ -17,15 +17,6 @@ class exports.SessionController extends FrontendController
 
 
   doLogin: (req, res)=>
-#    newUser =
-#      firstName: "Peter"
-#      lastName:  "Gering"
-#      username:  "peter"
-#      email:     "peter@example.com"
-#      password:  "12345678"
-#      tokens:    "12345678"
-#    Model.instanceOf('user').save newUser, (e, r)-> console.log e, r
-#    #get view name here since the _getViewName uses function-caller's name to build view name
     Model.instanceOf('user').login(req.body.email, req.body.password).then( (user)=>
       req.session.userId = user._id
 
@@ -33,8 +24,7 @@ class exports.SessionController extends FrontendController
       response = @get('json').render()
       res.json response
     )
-    .fail (e)->
-      console.log e.toJson()
+    .fail (e)=>
       @get('json').setSuccess false
       @get('json').setIsUserAuthed false
       @get('json').addMessage e.toJson()
@@ -48,6 +38,16 @@ class exports.SessionController extends FrontendController
     @get('json').setIsUserAuthed false
     res.json( @get('json').render() )
 
+
+#  createTestUser: ->
+#    newUser =
+#      firstName: "Peter"
+#      lastName:  "Gering"
+#      username:  "peter"
+#      email:     "peter@example.com"
+#      password:  "12345678"
+#      tokens:    "12345678"
+#    Model.instanceOf('user').save newUser, (e, r)-> console.log e, r
 
 
 

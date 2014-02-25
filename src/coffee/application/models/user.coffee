@@ -98,6 +98,39 @@ class User extends Model.Mongo
     defer.promise
 
 
+  getTokens: (inUserId)->
+    defer = Q.defer()
+
+    conditions  = {"_id": inUserId}
+    @getMongooseModel().findOne(conditions, "tokens").exec (err, result)->
+      if err
+        defer.reject new ExceptionUserMessage("error", "DB error")
+      else
+        if result
+          defer.resolve(result.tokens)
+        else
+          defer.reject new ExceptionUserMessage("error", "No user found")
+
+    defer.promise
+
+
+  decrementTokens: (inUserId)->
+    defer = Q.defer()
+
+    conditions  = {"_id": inUserId}
+    update =
+      $inc: {tokens: -1 }
+    options     = {}
+    @getMongooseModel().update conditions, update, options, (err, affected)->
+      if err
+        defer.reject new ExceptionUserMessage("error", "DB error")
+      else
+        defer.resolve affected
+
+    defer.promise.then =>
+      @getTokens(inUserId)
+
+
   # Finds user with given email
   #
   # @param  [String]      inEmail       Email address

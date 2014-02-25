@@ -8,6 +8,11 @@ Auction = (function() {
 
   Auction.prototype.init = function() {
     this._socket = io.connect(appConfig.config.baseUrl);
+    this._events = {
+      errorOccured: 'error_occured',
+      auctionUpdated: 'auction_updated',
+      tokensUpdated: 'tokens_updated'
+    };
     this._findElements();
     this._attachEvents();
     this._attachListeners();
@@ -21,7 +26,8 @@ Auction = (function() {
 
   Auction.prototype._findElements = function() {
     this._$doBidBtn = $('.js-do-bid-btn');
-    return this._$timeLabels = $('.js-time-label');
+    this._$timeLabels = $('.js-time-label');
+    return this._$tokensCount = $('#tokens-count');
   };
 
   Auction.prototype._attachEvents = function() {
@@ -29,11 +35,13 @@ Auction = (function() {
   };
 
   Auction.prototype._attachListeners = function() {
-    return this._attachAuctionUpdatedListener();
+    this._attachAuctionUpdatedListener();
+    this._attachErrorOccuredEventListener();
+    return this._attachTokensUpdatedEventListener();
   };
 
   Auction.prototype._attachAuctionUpdatedListener = function() {
-    return this._socket.on('auction_updated', (function(_this) {
+    return this._socket.on(this._events.auctionUpdated, (function(_this) {
       return function(data) {
         var $auctionHolder, $winnerHolder, startingPriceParts;
         console.log(data);
@@ -42,7 +50,7 @@ Auction = (function() {
         $auctionHolder.find('.price-label .price .js-int').text(startingPriceParts[0]);
         $auctionHolder.find('.price-label .price sup').text(startingPriceParts[1].substr(0, 2));
         $winnerHolder = $auctionHolder.find('.js-winner');
-        if ($winnerHolder.find('.js-winner').text() !== data.auction.lastBidder.username) {
+        if ($winnerHolder.text() !== data.auction.lastBidder.username) {
           $auctionHolder.find('.js-blinker').addClass('blink');
           setTimeout(function() {
             return $auctionHolder.find('.js-blinker').removeClass('blink');
@@ -50,6 +58,22 @@ Auction = (function() {
         }
         console.log($winnerHolder.text());
         return $winnerHolder.text(data.auction.lastBidder.username);
+      };
+    })(this));
+  };
+
+  Auction.prototype._attachErrorOccuredEventListener = function() {
+    return this._socket.on(this._events.errorOccured, (function(_this) {
+      return function(data) {
+        return alert('Error:' + data.message);
+      };
+    })(this));
+  };
+
+  Auction.prototype._attachTokensUpdatedEventListener = function() {
+    return this._socket.on(this._events.tokensUpdated, (function(_this) {
+      return function(data) {
+        return _this._$tokensCount.text(data.tokens);
       };
     })(this));
   };

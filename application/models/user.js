@@ -92,6 +92,52 @@ User = (function(_super) {
     return defer.promise;
   };
 
+  User.prototype.getTokens = function(inUserId) {
+    var conditions, defer;
+    defer = Q.defer();
+    conditions = {
+      "_id": inUserId
+    };
+    this.getMongooseModel().findOne(conditions, "tokens").exec(function(err, result) {
+      if (err) {
+        return defer.reject(new ExceptionUserMessage("error", "DB error"));
+      } else {
+        if (result) {
+          return defer.resolve(result.tokens);
+        } else {
+          return defer.reject(new ExceptionUserMessage("error", "No user found"));
+        }
+      }
+    });
+    return defer.promise;
+  };
+
+  User.prototype.decrementTokens = function(inUserId) {
+    var conditions, defer, options, update;
+    defer = Q.defer();
+    conditions = {
+      "_id": inUserId
+    };
+    update = {
+      $inc: {
+        tokens: -1
+      }
+    };
+    options = {};
+    this.getMongooseModel().update(conditions, update, options, function(err, affected) {
+      if (err) {
+        return defer.reject(new ExceptionUserMessage("error", "DB error"));
+      } else {
+        return defer.resolve(affected);
+      }
+    });
+    return defer.promise.then((function(_this) {
+      return function() {
+        return _this.getTokens(inUserId);
+      };
+    })(this));
+  };
+
   User.prototype.getByEmail = function(inEmail, onComplete) {
     return this.getMongooseModel().findOne({
       'email': inEmail
