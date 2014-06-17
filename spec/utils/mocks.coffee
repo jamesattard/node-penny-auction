@@ -1,3 +1,4 @@
+_ = require('underscore')
 # @deprecated. Use mocks,api.errorResponse instead
 exports.makeErrorResponse = (errorType, message)->
   {
@@ -26,6 +27,7 @@ class ErrorResponseMock
     @errors = []
 
   addValidation: (field, messages)->
+    messages = [messages] unless _.isArray messages
     @errors.push
       errorType : 'validation'
       field     : field

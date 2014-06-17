@@ -31,74 +31,137 @@ describe "AuthController", (done)->
 
     describe "It validates registration form data and ", (done)->
 
-      it "should return error messages if no data presented",  (done)->
-        request.post @registerUrl, {form: {}}, (error, response, body)->
-          expect(utils.jsonParseSafe(body)).to.be.equal(mocks.makeValidationErrorsResponse("email", [i18n.__("No email was entered")] ))
-          done()
+      describe "according to [LPR-0001] shall return JSON with 'ValidationMessage' error ", ->
 
-      it "should return error messages if all fields except email are presented",  (done)->
-        delete @regData.email
-        request.post @registerUrl, {form: @regData}, (error, response, body)->
-          errors = mocks.makeValidationErrorsResponse("email", [i18n.__("No email was entered")] )
-          expect(utils.jsonParseSafe(body)).to.be.equal( errors )
-          done()
-
-      it "should return error messages if all fields except username are presented",  (done)->
-        delete @regData.username
-        request.post @registerUrl, {form: @regData}, (error, response, body)->
-          errors = mocks.makeValidationErrorsResponse("username", [i18n.__('No username was entered')] )
-          expect(utils.jsonParseSafe(body)).to.be.equal(errors)
-          done()
-
-
-      it "should return error messages if password is absent",  (done)->
-        delete @regData.password
-        request.post @registerUrl, {form: @regData}, (error, response, body)->
-          errors = mocks.makeValidationErrorsResponse("password", [i18n.__('Please enter password')] )
-          expect(utils.jsonParseSafe(body)).to.be.equal( errors )
-          done()
-
-      it "should return error messages if confirm_password is absent",  (done)->
-        delete @regData.confirm_password
-        request.post @registerUrl, {form: @regData}, (error, response, body)->
-          errors = mocks.makeValidationErrorsResponse("confirm_password", [i18n.__('Please confirm your password')] )
-          expect(utils.jsonParseSafe(body)).to.be.equal( errors )
-          done()
-
-
-      it "should return error messages if password != confirm_password",  (done)->
-        @regData.confirm_password = @regData.password + "-"
-        request.post @registerUrl, {form: @regData}, (error, response, body)->
-          errors = mocks.makeValidationErrorsResponse("confirm_password", [i18n.__('Please enter the same value')] )
-          expect(utils.jsonParseSafe(body)).to.be.equal( errors )
-          done()
-
-
-      it "should create a new user when all form data is valid",  (done)->
-        request.post @registerUrl, {form: @regData}, (error, response, body)=>
-          console.log body
-          successMessage = {
-            "data": {
-              "email":    @regData.email,
-              "username": @regData.username
-            },
-            "messages": [
-              [i18n.__("Registration completed")]
-            ],
-            "redirectTo": "#{app.config.app.baseUrl}/home"
-          }
-
-          expect(utils.jsonParseSafe(body)).to.be.equal(successMessage)
-
-          try
-            User.findOne({username: @regData.username, email: @regData.email}).exec (err, user)=>
-              expect(err).to.be.equal(null)
-              expect(user).to.not.equal(null)
-              expect(user.username).to.be.equal(@regData.username)
-              expect(user.email).to.be.equal(@regData.email)
-          catch e
+        it "if no fields were sent with request ",  (done)->
+          request.post @registerUrl, {form: {}}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            expect(utils.jsonParseSafe(body)).to.be.equal(errors)
             done()
-            throw e
 
-          done()
+        it "if all fields except email were sent",  (done)->
+          delete @regData.email
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            expect(utils.jsonParseSafe(body)).to.be.equal( errors )
+            done()
+
+        it "all fields are valid, but email is empty",  (done)->
+          @regData.email = ''
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            expect(utils.jsonParseSafe(body)).to.be.equal( errors )
+            done()
+
+
+
+      describe "according to [LPR-0002] shall return JSON with 'ValidationMessage' error ", ->
+        it "if email has incorrect format (1)",  (done)->
+          @regData.email = 'email@email'
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("Please enter valid email") )
+            expect(utils.jsonParseSafe(body)).to.be.equal(errors)
+            done()
+
+        it "if email has incorrect format (2)",  (done)->
+          @regData.email = 'email@email.'
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("Please enter valid email") )
+            expect(utils.jsonParseSafe(body)).to.be.equal(errors)
+            done()
+
+        it "if email has incorrect format (3)",  (done)->
+          @regData.email = '@email.com'
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("Please enter valid email") )
+            expect(utils.jsonParseSafe(body)).to.be.equal(errors)
+            done()
+
+      describe "according to [LPR-0003] shall return JSON with 'ValidationMessage' error ", ->
+        it "if username field is absent",  (done)->
+          delete @regData.username
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'username', i18n.__("No username was entered") )
+            expect(utils.jsonParseSafe(body)).to.be.equal(errors)
+            done()
+
+        it "if username field is empty",  (done)->
+          @regData.username = ''
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'username', i18n.__("No username was entered") )
+            expect(utils.jsonParseSafe(body)).to.be.equal(errors)
+            done()
+
+
+
+      describe "according to [LPR-0004] shall return JSON with 'ValidationMessage' error ", ->
+        it "if password field is absent",  (done)->
+          delete @regData.password
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'password', i18n.__("Please enter password") )
+            expect(utils.jsonParseSafe(body)).to.be.equal( errors )
+            done()
+
+        it "if password field is empty",  (done)->
+          @regData.password = ''
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'password', i18n.__("Please enter password") )
+            expect(utils.jsonParseSafe(body)).to.be.equal( errors )
+            done()
+
+
+
+      describe "according to [LPR-0005] shall return JSON with 'ValidationMessage' error ", ->
+        it "if confirm_password field is absent",  (done)->
+          delete @regData.confirm_password
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'confirm_password', i18n.__("Please confirm your password") )
+            expect(utils.jsonParseSafe(body)).to.be.equal( errors )
+            done()
+
+        it "if confirm_password field is empty",  (done)->
+          @regData.confirm_password = ''
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'confirm_password', i18n.__("Please confirm your password") )
+            expect(utils.jsonParseSafe(body)).to.be.equal( errors )
+            done()
+
+
+
+      describe "according to [LPR-0006] shall return JSON with 'ValidationMessage' error ", ->
+        it "if confirm_password  field differs from the password field",  (done)->
+          @regData.confirm_password = @regData.password + "-"
+          request.post @registerUrl, {form: @regData}, (error, response, body)->
+            errors = mocks.api.errorResponse.addValidation( 'confirm_password', i18n.__("Please enter the same value") )
+            expect(utils.jsonParseSafe(body)).to.be.equal( errors )
+            done()
+
+
+      describe "according to [LPR-0007] shall return  'NormalizedJson'  and create user ", ->
+        it "if all fields are correct",  (done)->
+          request.post @registerUrl, {form: @regData}, (error, response, body)=>
+            console.log body
+            successMessage = {
+              "data": {
+                "email":    @regData.email,
+                "username": @regData.username
+              }
+              "messages": [
+                [i18n.__("Registration completed")]
+              ]
+            }
+
+            expect(utils.jsonParseSafe(body)).to.be.equal(successMessage)
+
+            try
+              User.findOne({username: @regData.username, email: @regData.email}).exec (err, user)=>
+                expect(err).to.be.equal(null)
+                expect(user).to.not.equal(null)
+                expect(user.username).to.be.equal(@regData.username)
+                expect(user.email).to.be.equal(@regData.email)
+            catch e
+              done()
+              throw e
+
+            done()
 
