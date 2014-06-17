@@ -1,3 +1,4 @@
+# @deprecated. Use mocks,api.errorResponse instead
 exports.makeErrorResponse = (errorType, message)->
   {
     errors: [
@@ -8,6 +9,7 @@ exports.makeErrorResponse = (errorType, message)->
     ]
   }
 
+# @deprecated. Use mocks,api.errorResponse.addValidation.get() instead
 exports.makeValidationErrorsResponse = (field, messages)->
   {
     errors: [
@@ -18,3 +20,23 @@ exports.makeValidationErrorsResponse = (field, messages)->
       }
     ]
   }
+
+class ErrorResponseMock
+  constructor: ->
+    @errors = []
+
+  addValidation: (field, messages)->
+    @errors.push
+      errorType : 'validation'
+      field     : field
+      messages  : messages
+
+    @
+
+  get: ->
+    json = {errors: @errors}
+    @errors = []
+    json
+
+exports.api =
+  errorResponse   : new ErrorResponseMock

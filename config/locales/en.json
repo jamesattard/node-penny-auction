@@ -1,3 +1,12 @@
 {
-  "Welcome": "Welcome"
+  "No email was entered": "No email was entered",
+  "No username was entered": "No username was entered",
+  "Please enter password": "Please enter password",
+  "Please enter valid email": "Please enter valid email",
+  "Password's length must be 8 symbols minimum": "Password's length must be 8 symbols minimum",
+  "Please confirm your password": "Please confirm your password",
+  "Please enter the same value": "Please enter the same value",
+  "Registration completed": "Registration completed",
+  "Incorrect email or password": "Incorrect email or password",
+  "You have been logged successfully, please wait": "You have been logged successfully, please wait"
 }
