@@ -29,8 +29,18 @@ module.exports.routes = {
   // (Alternatively, remove this and add an `index.html` file in your `assets` directory)
   '/': {
     view: 'homepage'
-  },
+  }
 
+
+  ,'get /login': 'AuthController.login'
+  ,'get /logout': 'AuthController.logout'
+  ,'get /register': 'AuthController.register'
+
+  ,'post /api/auth/local': 'AuthController.callback'
+  ,'post /api/auth/local/:action': 'AuthController.callback'
+
+  ,'get /api/auth/:provider': 'AuthController.provider'
+  ,'get /api/auth/:provider/callback': 'AuthController.callback'
 
   // Custom routes here...
 
