@@ -36,6 +36,10 @@
   "author": "alex",
   "license": "",
   "devDependencies": {
-    "request": "^2.36.0"
+    "request": "^2.36.0",
+    "mocha": "^1.20.1",
+    "chai": "^1.9.1",
+    "sinon": "^1.10.2",
+    "coffee-script": "^1.7.1"
   }
 }
