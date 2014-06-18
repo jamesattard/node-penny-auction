@@ -27,7 +27,7 @@ describe "AuthController", (done)->
       confirm_password: password
 
     @loginData =
-      email: email
+      identifier: email
       password: password
 
 
@@ -40,34 +40,34 @@ describe "AuthController", (done)->
 
         it "if email and password are absent",  (done)->
           request.post @loginUrl, {form: {}}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
-            .addValidation( 'password', i18n.__("Please enter password") )
+            errors = mocks.api.errorResponse.addValidation( 'identifier', i18n.__("No email was entered") )
+#            .addValidation( 'password', i18n.__("Please enter password") )
 
             expect(utils.jsonParseSafe(body)).to.be.equal(errors.get())
             done()
 
-        it "if email and password are empty",  (done)->
-          @loginData.email = ''
+        it.only "if email and password are empty",  (done)->
+          @loginData.identifier = ''
           @loginData. password = ''
           request.post @loginUrl, {form: @loginData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
-            .addValidation( 'password', i18n.__("Please enter password") )
+            console.log response.statusCode, body
+            errors = mocks.api.errorResponse.addValidation( 'identifier', i18n.__("No email was entered") )
 
-            expect(utils.jsonParseSafe(body)).to.be.equal(errors.get())
+            expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
             done()
 
         it "if email is empty but password is not",  (done)->
-          @loginData.email = ''
+          @loginData.identifier = ''
           request.post @loginUrl, {form: @loginData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            errors = mocks.api.errorResponse.addValidation( 'identifier', i18n.__("No email was entered") )
 
             expect(utils.jsonParseSafe(body)).to.be.equal(errors.get())
             done()
 
         it "if email is absent but password is not",  (done)->
-          delete @loginData.email
+          delete @loginData.identifier
           request.post @loginUrl, {form: @loginData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            errors = mocks.api.errorResponse.addValidation( 'identifier', i18n.__("No email was entered") )
 
             expect(utils.jsonParseSafe(body)).to.be.equal(errors.get())
             done()
@@ -91,25 +91,25 @@ describe "AuthController", (done)->
 
       describe "according to [LPL-0002] shall return JSON with 'ValidationMessage' error ", ->
         it "if email format  is incorrect (1)",  (done)->
-          @loginData.email = "email@email"
+          @loginData.identifier = "email@email"
           request.post @loginUrl, {form: @loginData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'password', i18n.__("Please enter valid email") )
+            errors = mocks.api.errorResponse.addValidation( 'identifier', i18n.__("Please enter valid email") )
 
             expect(utils.jsonParseSafe(body)).to.be.equal(errors.get())
             done()
 
         it "if email format  is incorrect (2)",  (done)->
-          @loginData.email = "email@email."
+          @loginData.identifier = "email@email."
           request.post @loginUrl, {form: @loginData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'password', i18n.__("Please enter valid email") )
+            errors = mocks.api.errorResponse.addValidation( 'identifier', i18n.__("Please enter valid email") )
 
             expect(utils.jsonParseSafe(body)).to.be.equal(errors.get())
             done()
 
         it "if email format  is incorrect (3)",  (done)->
-          @loginData.email = "email@.com"
+          @loginData.identifier = "email@.com"
           request.post @loginUrl, {form: @loginData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'password', i18n.__("Please enter valid email") )
+            errors = mocks.api.errorResponse.addValidation( 'identifier', i18n.__("Please enter valid email") )
 
             expect(utils.jsonParseSafe(body)).to.be.equal(errors.get())
             done()

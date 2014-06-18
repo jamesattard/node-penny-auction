@@ -103,6 +103,7 @@ found, its password is checked against the password supplied in the form.
 @param {Function} next
 ###
 exports.login = (req, identifier, password, next) ->
+  console.log "exports.login"
   isEmail = validator.isEmail(identifier)
   query = {}
   if isEmail
@@ -113,10 +114,10 @@ exports.login = (req, identifier, password, next) ->
     return next(err)  if err
     unless user
       if isEmail
-        req.flash "error", "Error.Passport.Email.NotFound"
+        error = "Error.Passport.Email.NotFound"
       else
-        req.flash "error", "Error.Passport.Username.NotFound"
-      return next(null, false)
+        error = "Error.Passport.Username.NotFound"
+      return next(error)
     Passport.findOne
       protocol: "local"
       user: user.id
@@ -125,14 +126,12 @@ exports.login = (req, identifier, password, next) ->
         passport.validatePassword password, (err, res) ->
           return next(err)  if err
           unless res
-            req.flash "error", "Error.Passport.Password.Wrong"
-            next null, false
+            next "Error.Passport.Password.Wrong"
           else
             next null, user
 
       else
-        req.flash "error", "Error.Passport.Password.NotSet"
-        next null, false
+        next "Error.Passport.Password.NotSet"
       return
 
     return

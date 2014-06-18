@@ -171,7 +171,7 @@ http://passportjs.org/guide/authenticate/
  */
 
 passport.callback = function(req, res, next) {
-  var action, provider;
+  var action, identifier, password, provider;
   provider = req.param("provider", "local");
   action = req.param("action");
   if (provider === "local" && action !== undefined) {
@@ -184,6 +184,14 @@ passport.callback = function(req, res, next) {
     }
   } else {
     this.loadStrategies(req);
+    if (provider === "local" && action === undefined) {
+      identifier = req.param('identifier', '');
+      password = req.param('password', '');
+      console.log("identifier", identifier, identifier === '');
+      if (identifier === '') {
+        return next(new ValidationError("identifier", "No email was entered"));
+      }
+    }
     this.authenticate(provider, next)(req, res, req.next);
   }
 };

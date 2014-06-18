@@ -121,14 +121,20 @@ AuthController = {
   @param {Object} res
    */
   callback: function(req, res) {
-    passport.callback(req, res, function(err, user) {
-      req.login(user, function(err) {
-        if (err) {
-          res.redirect((req.param("action") === "register" ? "/register" : "/login"));
-        } else {
-          res.redirect("/");
-        }
-      });
+    return passport.callback(req, res, function(err, user) {
+      console.log(err, user);
+      if (err) {
+        return res.serverError(err);
+      } else {
+        return req.login(user, function(err) {
+          console.log("err", err);
+          if (err) {
+            return res.redirect((req.param("action") === "register" ? "/register" : "/login"));
+          } else {
+            return res.redirect("/");
+          }
+        });
+      }
     });
   }
 };

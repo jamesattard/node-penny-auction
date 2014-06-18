@@ -117,6 +117,7 @@ found, its password is checked against the password supplied in the form.
 
 exports.login = function(req, identifier, password, next) {
   var isEmail, query;
+  console.log("exports.login");
   isEmail = validator.isEmail(identifier);
   query = {};
   if (isEmail) {
@@ -125,16 +126,17 @@ exports.login = function(req, identifier, password, next) {
     query.username = identifier;
   }
   User.findOne(query, function(err, user) {
+    var error;
     if (err) {
       return next(err);
     }
     if (!user) {
       if (isEmail) {
-        req.flash("error", "Error.Passport.Email.NotFound");
+        error = "Error.Passport.Email.NotFound";
       } else {
-        req.flash("error", "Error.Passport.Username.NotFound");
+        error = "Error.Passport.Username.NotFound";
       }
-      return next(null, false);
+      return next(error);
     }
     Passport.findOne({
       protocol: "local",
@@ -146,15 +148,13 @@ exports.login = function(req, identifier, password, next) {
             return next(err);
           }
           if (!res) {
-            req.flash("error", "Error.Passport.Password.Wrong");
-            return next(null, false);
+            return next("Error.Passport.Password.Wrong");
           } else {
             return next(null, user);
           }
         });
       } else {
-        req.flash("error", "Error.Passport.Password.NotSet");
-        next(null, false);
+        next("Error.Passport.Password.NotSet");
       }
     });
   });

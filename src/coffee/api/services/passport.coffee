@@ -187,8 +187,8 @@ http://passportjs.org/guide/authenticate/
 @param {Function} next
 ###
 passport.callback = (req, res, next) ->
-  provider = req.param("provider", "local")
-  action = req.param("action")
+  provider  = req.param("provider", "local")
+  action    = req.param("action")
 
   # Passport.js wasn't really built for local user registration, but it's nice
   # having it tied into everything else.
@@ -203,6 +203,14 @@ passport.callback = (req, res, next) ->
 
     # Load authentication strategies
     @loadStrategies req
+
+    if provider is "local" and action is `undefined`
+      # check if identifier and password are not empty
+      identifier  = req.param('identifier', '')
+      password    = req.param('password', '')
+      console.log "identifier", identifier, identifier is ''
+      if identifier is ''
+        return next new ValidationError "identifier", "No email was entered"
 
     # The provider will redirect the user to this URL after approval. Finish
     # the authentication process by attempting to obtain an access token. If
