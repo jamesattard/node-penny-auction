@@ -126,17 +126,11 @@ exports.login = function(req, identifier, password, next) {
     query.username = identifier;
   }
   User.findOne(query, function(err, user) {
-    var error;
     if (err) {
       return next(err);
     }
     if (!user) {
-      if (isEmail) {
-        error = "Error.Passport.Email.NotFound";
-      } else {
-        error = "Error.Passport.Username.NotFound";
-      }
-      return next(error);
+      return next("Incorrect email or password");
     }
     Passport.findOne({
       protocol: "local",

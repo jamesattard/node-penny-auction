@@ -113,11 +113,11 @@ exports.login = (req, identifier, password, next) ->
   User.findOne query, (err, user) ->
     return next(err)  if err
     unless user
-      if isEmail
-        error = "Error.Passport.Email.NotFound"
-      else
-        error = "Error.Passport.Username.NotFound"
-      return next(error)
+#      if isEmail
+#        error = "Error.Passport.Email.NotFound"
+#      else
+#        error = "Error.Passport.Username.NotFound"
+      return next("Incorrect email or password")
     Passport.findOne
       protocol: "local"
       user: user.id

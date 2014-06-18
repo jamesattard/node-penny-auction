@@ -26,6 +26,16 @@ class ErrorResponseMock
   constructor: ->
     @errors = []
 
+  factory: ->
+    new ErrorResponseMock
+
+  addString: (message)->
+    @errors.push
+      errorType: 'string'
+      message: message
+
+    @
+
   addValidation: (field, messages)->
     messages = [messages] unless _.isArray messages
     @errors.push

@@ -35,21 +35,21 @@ describe "AuthController", (done)->
 
         it "if no fields were sent with request ",  (done)->
           request.post @registerUrl, {form: {}}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'email', i18n.__("No email was entered") )
             expect(utils.jsonParseSafe(body)).to.be.equal(errors)
             done()
 
         it "if all fields except email were sent",  (done)->
           delete @regData.email
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'email', i18n.__("No email was entered") )
             expect(utils.jsonParseSafe(body)).to.be.equal( errors )
             done()
 
         it "all fields are valid, but email is empty",  (done)->
           @regData.email = ''
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("No email was entered") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'email', i18n.__("No email was entered") )
             expect(utils.jsonParseSafe(body)).to.be.equal( errors )
             done()
 
@@ -59,21 +59,21 @@ describe "AuthController", (done)->
         it "if email has incorrect format (1)",  (done)->
           @regData.email = 'email@email'
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("Please enter valid email") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'email', i18n.__("Please enter valid email") )
             expect(utils.jsonParseSafe(body)).to.be.equal(errors)
             done()
 
         it "if email has incorrect format (2)",  (done)->
           @regData.email = 'email@email.'
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("Please enter valid email") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'email', i18n.__("Please enter valid email") )
             expect(utils.jsonParseSafe(body)).to.be.equal(errors)
             done()
 
         it "if email has incorrect format (3)",  (done)->
           @regData.email = '@email.com'
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'email', i18n.__("Please enter valid email") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'email', i18n.__("Please enter valid email") )
             expect(utils.jsonParseSafe(body)).to.be.equal(errors)
             done()
 
@@ -81,14 +81,14 @@ describe "AuthController", (done)->
         it "if username field is absent",  (done)->
           delete @regData.username
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'username', i18n.__("No username was entered") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'username', i18n.__("No username was entered") )
             expect(utils.jsonParseSafe(body)).to.be.equal(errors)
             done()
 
         it "if username field is empty",  (done)->
           @regData.username = ''
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'username', i18n.__("No username was entered") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'username', i18n.__("No username was entered") )
             expect(utils.jsonParseSafe(body)).to.be.equal(errors)
             done()
 
@@ -98,14 +98,14 @@ describe "AuthController", (done)->
         it "if password field is absent",  (done)->
           delete @regData.password
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'password', i18n.__("Please enter password") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'password', i18n.__("Please enter password") )
             expect(utils.jsonParseSafe(body)).to.be.equal( errors )
             done()
 
         it "if password field is empty",  (done)->
           @regData.password = ''
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'password', i18n.__("Please enter password") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'password', i18n.__("Please enter password") )
             expect(utils.jsonParseSafe(body)).to.be.equal( errors )
             done()
 
@@ -115,14 +115,14 @@ describe "AuthController", (done)->
         it "if confirm_password field is absent",  (done)->
           delete @regData.confirm_password
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'confirm_password', i18n.__("Please confirm your password") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'confirm_password', i18n.__("Please confirm your password") )
             expect(utils.jsonParseSafe(body)).to.be.equal( errors )
             done()
 
         it "if confirm_password field is empty",  (done)->
           @regData.confirm_password = ''
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'confirm_password', i18n.__("Please confirm your password") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'confirm_password', i18n.__("Please confirm your password") )
             expect(utils.jsonParseSafe(body)).to.be.equal( errors )
             done()
 
@@ -132,7 +132,7 @@ describe "AuthController", (done)->
         it "if confirm_password  field differs from the password field",  (done)->
           @regData.confirm_password = @regData.password + "-"
           request.post @registerUrl, {form: @regData}, (error, response, body)->
-            errors = mocks.api.errorResponse.addValidation( 'confirm_password', i18n.__("Please enter the same value") )
+            errors = mocks.api.errorResponse.factory().addValidation( 'confirm_password', i18n.__("Please enter the same value") )
             expect(utils.jsonParseSafe(body)).to.be.equal( errors )
             done()
 

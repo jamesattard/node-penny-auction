@@ -29,6 +29,8 @@ User model free of bloat.
 # Load authentication protocols
 passport.protocols = require("./protocols")
 
+validator = require("validator")
+
 ###
 Connect a third-party profile to a local user
 
@@ -205,12 +207,27 @@ passport.callback = (req, res, next) ->
     @loadStrategies req
 
     if provider is "local" and action is `undefined`
-      # check if identifier and password are not empty
+
+      #
+      # validate  identifier and password
+      #
       identifier  = req.param('identifier', '')
       password    = req.param('password', '')
-      console.log "identifier", identifier, identifier is ''
+
+      errors = []
       if identifier is ''
-        return next new ValidationError "identifier", "No email was entered"
+        errors.push new ValidationError "identifier", "No email was entered"
+      else if not validator.isEmail(identifier)
+        errors.push new ValidationError "identifier", "Please enter valid email"
+
+      if password is ''
+        errors.push new ValidationError "password", "Please enter password"
+      else if password.length < 8
+        errors.push new ValidationError "password", "Password's length must be 8 symbols minimum"
+
+      return next errors if errors.length > 0
+
+
 
     # The provider will redirect the user to this URL after approval. Finish
     # the authentication process by attempting to obtain an access token. If
