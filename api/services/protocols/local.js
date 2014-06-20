@@ -29,29 +29,35 @@ and assign the newly created user a local Passport.
  */
 
 exports.register = function(req, res, next) {
-  var email, password, username;
+  var confirmPassword, email, password, username;
   email = req.param("email");
   username = req.param("username");
   password = req.param("password");
+  confirmPassword = req.param("confirm_password");
   if (!email) {
-    req.flash("error", "Error.Passport.Email.Missing");
-    return next(new Error("No email was entered."));
+    return next(new ValidationError("email", "No email was entered"));
+  }
+  if (!validator.isEmail(email)) {
+    return next(new ValidationError("email", "Please enter valid email"));
   }
   if (!username) {
-    req.flash("error", "Error.Passport.Username.Missing");
-    return next(new Error("No username was entered."));
+    return next(new ValidationError("username", "No username was entered"));
   }
   if (!password) {
-    req.flash("error", "Error.Passport.Password.Missing");
-    return next(new Error("No password was entered."));
+    return next(new ValidationError("password", "Please enter password"));
+  }
+  if (!confirmPassword) {
+    return next(new ValidationError("confirm_password", "Please confirm your password"));
+  }
+  if (password !== confirmPassword) {
+    return next(new ValidationError("confirm_password", "Please enter the same value"));
   }
   User.create({
     username: username,
     email: email
   }, function(err, user) {
     if (err) {
-      req.flash("error", "Error.Passport.User.Exists");
-      return next(err);
+      return next("Error.Passport.User.Exists");
     }
     Passport.create({
       protocol: "local",
@@ -117,7 +123,6 @@ found, its password is checked against the password supplied in the form.
 
 exports.login = function(req, identifier, password, next) {
   var isEmail, query;
-  console.log("exports.login");
   isEmail = validator.isEmail(identifier);
   query = {};
   if (isEmail) {

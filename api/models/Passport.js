@@ -41,17 +41,17 @@ Passport = {
     user: {
       model: "User",
       required: true
-    }
-  },
+    },
 
-  /*
-  Validate password used by the local strategy.
-  
-  @param {string}   password The password to validate
-  @param {Function} next
-   */
-  validatePassword: function(password, next) {
-    bcrypt.compare(password, this.password, next);
+    /*
+    Validate password used by the local strategy.
+    
+    @param {string}   password The password to validate
+    @param {Function} next
+     */
+    validatePassword: function(password, next) {
+      bcrypt.compare(password, this.password, next);
+    }
   },
 
   /*

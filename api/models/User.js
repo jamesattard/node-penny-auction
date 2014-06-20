@@ -13,6 +13,12 @@ module.exports = {
     passports: {
       collection: "Passport",
       via: "user"
+    },
+    toJSON: function() {
+      var data;
+      data = this.toObject();
+      delete data.password;
+      return data;
     }
   }
 };

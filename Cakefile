@@ -5,7 +5,7 @@ fs = require 'fs'
 
 
 task 'test', 'Runs tests', ->
-  watch = exec "NODE_ENV=test mocha --compilers coffee:coffee-script/register spec/SpecHelper.coffee spec/**/*Spec.coffee"
+  watch = exec "NODE_ENV=test mocha --timeout 15000 --compilers coffee:coffee-script/register spec/SpecHelper.coffee spec/**/*Spec.coffee"
   watch.stdout.on 'data', (data)-> process.stdout.write data.toString()
   watch.stderr.on 'data', (data)-> process.stderr.write data.toString()
 

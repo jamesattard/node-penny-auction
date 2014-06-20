@@ -70,15 +70,15 @@ Passport =
       required: true
 
 
-  ###
-  Validate password used by the local strategy.
+    ###
+    Validate password used by the local strategy.
 
-  @param {string}   password The password to validate
-  @param {Function} next
-  ###
-  validatePassword: (password, next) ->
-    bcrypt.compare password, @password, next
-    return
+    @param {string}   password The password to validate
+    @param {Function} next
+    ###
+    validatePassword: (password, next) ->
+      bcrypt.compare password, @password, next
+      return
 
 
   ###

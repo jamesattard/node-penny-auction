@@ -1,3 +1,4 @@
+async   =  require('async')
 Sails   = require('sails')
 request = require('request')
 utils   = require('../utils')
@@ -11,7 +12,12 @@ describe "AuthController", (done)->
 
   # cleanup DB after tests
   after (done)->
-    User.destroy({like: {username: "%#{testingUsernamePattern}%"}}).exec (err)->
+    User.destroy({like: {username: "%#{testingUsernamePattern}%"}}).exec (err, deletedUsers)->
+      async.each deletedUsers, (user, callback)->
+        Passport.destroy({user: user.id}).exec ->
+          callback()
+      , ->
+        done()
 
 
   beforeEach ->
@@ -135,7 +141,7 @@ describe "AuthController", (done)->
             done()
 
       describe "according to [LPL-0005] shall return 'NormalizedJson'", ->
-        it.only "if  login and password are valid and user is exist in DB",  (done)->
+        it "if  login and password are valid and user is exist in DB",  (done)->
           request.post @registerUrl, {form: @regData}, (error, response, body)=>
 
             expect(response.statusCode).to.be.equal(200)
@@ -143,9 +149,17 @@ describe "AuthController", (done)->
             request.post @loginUrl, {form: @loginData}, (error, response, body)=>
               normalizedJsonResponse =
                 data:
-                  username: @loginData.username
-                  email:    @loginData.email
+                  email:        @regData.email
+                  username:     @regData.username
                 messages: [i18n.__("You have been logged successfully, please wait") ]
 
-              expect(utils.jsonParseSafe(body)).to.deep.equal(normalizedJsonResponse)
+              responseJson = utils.jsonParseSafe(body)
+              expect(responseJson.messages).to.deep.equal(normalizedJsonResponse.messages)
+              expect(responseJson.data.email).to.be.equal(normalizedJsonResponse.data.email)
+              expect(responseJson.data.username).to.be.equal(normalizedJsonResponse.data.username)
+
+              expect(responseJson.data.createdAt).to.not.empty
+              expect(responseJson.data.updatedAt).to.not.empty
+              expect(responseJson.data.id).to.not.empty
+
               done()

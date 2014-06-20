@@ -122,22 +122,20 @@ AuthController =
   ###
   callback: (req, res) ->
     passport.callback req, res, (err, user) ->
-      console.log err, user
+#      console.log err, user
       if err
         return res.serverError err
       else
         req.login user, (err) ->
-          console.log "err", err
-
-#          res.serverError err if err
-          # If an error was thrown, redirect the user to the login which should
-          # take care of rendering the error messages.
+#          console.log "err", err
           if err
-            res.redirect (if req.param("action") is "register" then "/register" else "/login")
-
-            # Upon successful login, send the user to the homepage were req.user
-            # will available.
+            return res.serverError err
           else
-            res.redirect "/"
+            message = if req.param("action") is "register"
+              "Registration completed"
+            else
+              "You have been logged successfully, please wait"
+            res.ok new SuccessJsonResponse user, message
+
 
 module.exports = AuthController

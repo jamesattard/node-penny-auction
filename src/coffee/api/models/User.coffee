@@ -13,3 +13,9 @@ module.exports =
     passports:
       collection: "Passport"
       via: "user"
+
+
+    toJSON: ->
+      data = @toObject()
+      delete data.password
+      data

@@ -122,16 +122,16 @@ AuthController = {
    */
   callback: function(req, res) {
     return passport.callback(req, res, function(err, user) {
-      console.log(err, user);
       if (err) {
         return res.serverError(err);
       } else {
         return req.login(user, function(err) {
-          console.log("err", err);
+          var message;
           if (err) {
-            return res.redirect((req.param("action") === "register" ? "/register" : "/login"));
+            return res.serverError(err);
           } else {
-            return res.redirect("/");
+            message = req.param("action") === "register" ? "Registration completed" : "You have been logged successfully, please wait";
+            return res.ok(new SuccessJsonResponse(user, message));
           }
         });
       }

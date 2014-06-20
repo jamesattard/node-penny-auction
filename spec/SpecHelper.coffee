@@ -5,7 +5,7 @@ Sails   = require('sails')
 GLOBAL.should = ChaiJS.should
 GLOBAL.expect = ChaiJS.expect
 GLOBAL.assert = ChaiJS.assert
-GLOBAL.sinon = SinonJS
+GLOBAL.sinon  = SinonJS
 
 
 GLOBAL.app         = null

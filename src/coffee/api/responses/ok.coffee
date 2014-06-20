@@ -20,14 +20,20 @@ module.exports = sendOK = (data, viewOrRedirect) ->
 
   # Serve JSON (with optional JSONP support)
   sendJSON = (data) ->
-    unless data
-      res.send()
+#    unless data
+#      res.send()
+#    else
+#      return res.send(data)  if typeof data isnt "object"
+#      if req.options.jsonp and not req.isSocket
+#        res.jsonp data
+#      else
+#        res.json data
+
+    if req.options.jsonp and not req.isSocket
+      res.jsonp new SuccessJsonResponse data
     else
-      return res.send(data)  if typeof data isnt "object"
-      if req.options.jsonp and not req.isSocket
-        res.jsonp data
-      else
-        res.json data
+      res.json data
+
   req = @req
   res = @res
 

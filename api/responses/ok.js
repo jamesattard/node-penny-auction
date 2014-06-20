@@ -21,17 +21,10 @@ var sendOK;
 module.exports = sendOK = function(data, viewOrRedirect) {
   var locals, req, res, sendJSON, viewReady;
   sendJSON = function(data) {
-    if (!data) {
-      return res.send();
+    if (req.options.jsonp && !req.isSocket) {
+      return res.jsonp(new SuccessJsonResponse(data));
     } else {
-      if (typeof data !== "object") {
-        return res.send(data);
-      }
-      if (req.options.jsonp && !req.isSocket) {
-        return res.jsonp(data);
-      } else {
-        return res.json(data);
-      }
+      return res.json(data);
     }
   };
   req = this.req;
