@@ -135,7 +135,7 @@ AuthController =
               "Registration completed"
             else
               "You have been logged successfully, please wait"
-            res.ok new SuccessJsonResponse user, message
+            res.ok new Responses::NormalizedJson user, message
 
 
 module.exports = AuthController

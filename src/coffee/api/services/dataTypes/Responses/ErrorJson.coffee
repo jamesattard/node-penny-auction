@@ -1,5 +1,5 @@
 ###
-  The ErrorResponse class is designed to construct error response
+  The ErrorJson class is designed to construct error response
 
   It can handle following data passed to its constructor:(as single object or array of these objects)
     * String - will be serialized to hash like that has following format
@@ -16,15 +16,15 @@
       all childs of SerializableError class implements toJSON() function that will be used to serialize array
 
   @example
-    new ErrorResponse "User not found"
-    new ErrorResponse new Error "User not found"
-    new ErrorResponse new ValidationError "email", "Please enter email"
+    new ErrorJson "User not found"
+    new ErrorJson new Error "User not found"
+    new ErrorJson new ValidationError "email", "Please enter email"
 
-    new ErrorResponse ["User not found", new Error("User not found"), new ValidationError("email", "Please enter email"), ]
+    new ErrorJson ["User not found", new Error("User not found"), new ValidationError("email", "Please enter email"), ]
 ###
 _ = require("underscore")
 
-class ErrorResponse
+class ErrorJson
   constructor: (inErrors)->
     @_errors = @_prepareErrorsForSending(inErrors)
 
@@ -101,4 +101,4 @@ class ErrorResponse
 
 
 
-GLOBAL.ErrorResponse = ErrorResponse
+exports.ErrorJson = ErrorJson

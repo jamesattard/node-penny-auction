@@ -1,6 +1,4 @@
-_ = require("underscore")
-
-class SuccessJsonResponse
+class NormalizedJson
   constructor: (@data = {}, @messages=[])->
     @messages = [@messages] if _.isString @messages
 
@@ -10,4 +8,4 @@ class SuccessJsonResponse
       messages: @messages
     }
 
-GLOBAL.SuccessJsonResponse = SuccessJsonResponse
+exports.NormalizedJson = NormalizedJson

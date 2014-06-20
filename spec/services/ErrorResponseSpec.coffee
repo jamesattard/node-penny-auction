@@ -22,7 +22,7 @@ describe "ErrorResponse", (done)->
   describe "class constructor shall be able to accept ", ->
     it "[ERP-0001] String as parameter", ->
       errorString = "follow the white rabbit"
-      resp        = new ErrorResponse errorString
+      resp        = new Responses::ErrorJson errorString
       respMock    = errorResponseMock.factory().addString(errorString)
       expect(resp.toJSON()).to.deep.equal(respMock.get())
 
@@ -30,13 +30,13 @@ describe "ErrorResponse", (done)->
 
     it "[ERP-0002] Error as parameter", ->
       errorString = "Winter is close"
-      resp        = new ErrorResponse new Error errorString
+      resp        = new Responses::ErrorJson new Error errorString
       respMock    = errorResponseMock.factory().addException(errorString)
       expect(resp.toJSON()).to.deep.equal(respMock.get())
 
     it "[ERP-0002] class derived from Error as parameter (TypeError)", ->
       errorString = "I'm the mother of dragons!"
-      resp        = new ErrorResponse new TypeError errorString
+      resp        = new Responses::ErrorJson new TypeError errorString
       respMock    = errorResponseMock.factory().addException(errorString)
       expect(resp.toJSON()).to.deep.equal(respMock.get())
 
@@ -44,7 +44,7 @@ describe "ErrorResponse", (done)->
       class CustomError extends Error
 
       errorString = "Gigiti gigity goooo"
-      resp        = new ErrorResponse new CustomError errorString
+      resp        = new Responses::ErrorJson new CustomError errorString
       respMock    = errorResponseMock.factory().addException(errorString)
       expect(resp.toJSON()).to.deep.equal(respMock.get())
 
@@ -52,7 +52,7 @@ describe "ErrorResponse", (done)->
       app.config.environment = "production"
 
       errorString = "Screw you guys I'm going home"
-      resp        = new ErrorResponse new Error errorString
+      resp        = new Responses::ErrorJson new Error errorString
       #mock with no errors
       respMock    = errorResponseMock.factory()
       expect(resp.toJSON()).to.deep.equal(respMock.get())
@@ -69,7 +69,7 @@ describe "ErrorResponse", (done)->
         errorType: 'customErrorType'
         messages: [serializableErrorText]
 
-      resp        = new ErrorResponse [stringErrorText, new Error(errorClassText), new @CustomSerializableError(errorData)]
+      resp        = new Responses::ErrorJson [stringErrorText, new Error(errorClassText), new @CustomSerializableError(errorData)]
       #mock with no errors
       respMock    = errorResponseMock.factory().addString(stringErrorText).addCustom(errorData)
       expect(resp.toJSON()).to.deep.equal(respMock.get())
@@ -82,7 +82,7 @@ describe "ErrorResponse", (done)->
         errorType: 'customErrorType'
         messages: [errorString]
 
-      resp        = new ErrorResponse new @CustomSerializableError(errorData)
+      resp        = new Responses::ErrorJson new @CustomSerializableError(errorData)
       respMock    = errorResponseMock.factory().addCustom(errorData)
       expect(resp.toJSON()).to.deep.equal(respMock.get())
 
@@ -101,7 +101,7 @@ describe "ErrorResponse", (done)->
 
 
       respMock    = errorResponseMock.factory().addString(stringErrorText).addException(errorClassText).addCustom(errorData)
-      resp        = new ErrorResponse [stringErrorText, new Error(errorClassText), new @CustomSerializableError(errorData)]
+      resp        = new Responses::ErrorJson [stringErrorText, new Error(errorClassText), new @CustomSerializableError(errorData)]
       expect(resp.toJSON()).to.deep.equal(respMock.get())
 
 
@@ -111,7 +111,7 @@ describe "ErrorResponse", (done)->
         errorString = "follow the white rabbit"
 
 
-        resp        = new ErrorResponse new @UnknownError(errorString)
+        resp        = new Responses::ErrorJson new @UnknownError(errorString)
         respMock    = errorResponseMock.factory()
         expect(resp.toJSON()).to.deep.equal(respMock.get())
 
@@ -128,7 +128,7 @@ describe "ErrorResponse", (done)->
 
 
         console.log @UnknownError
-        resp        = new ErrorResponse [stringErrorText, new @UnknownError(unknownErrorText), new Error(errorClassText),
+        resp        = new Responses::ErrorJson [stringErrorText, new @UnknownError(unknownErrorText), new Error(errorClassText),
                                          new @CustomSerializableError(errorData) ]
         respMock    = errorResponseMock.factory().addString(stringErrorText).addException(errorClassText).addCustom(errorData)
         expect(resp.toJSON()).to.deep.equal(respMock.get())

@@ -28,9 +28,9 @@ module.exports = serverError = (err, viewOrRedirect) ->
 #        res.json data
 
     if req.options.jsonp and not req.isSocket
-      res.jsonp new ErrorResponse data
+      res.jsonp new Responses::ErrorJson data
     else
-      res.json new ErrorResponse data
+      res.json new Responses::ErrorJson data
 
   req = @req
   res = @res

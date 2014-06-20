@@ -5,8 +5,7 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
-    "sails": "~0.10.0-rc7",
-    "sails-disk": "~0.10.0",
+    "sails": "~0.10.0-rc8",
     "rc": "~0.3.3",
     "include-all": "^0.1.6",
     "ejs": "~0.8.4",
@@ -39,7 +38,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/alex/auc.git"
+    "url": "git@github.com:apedyashev/node-penny-auction.git"
   },
   "author": "alex",
   "license": "",

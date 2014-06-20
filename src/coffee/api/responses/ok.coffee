@@ -30,9 +30,9 @@ module.exports = sendOK = (data, viewOrRedirect) ->
 #        res.json data
 
     if req.options.jsonp and not req.isSocket
-      res.jsonp new SuccessJsonResponse data
+      res.jsonp data # new Responses::SuccessJson data
     else
-      res.json data
+      res.json data # new Responses::SuccessJson data
 
   req = @req
   res = @res

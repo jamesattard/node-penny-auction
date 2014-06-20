@@ -131,7 +131,7 @@ AuthController = {
             return res.serverError(err);
           } else {
             message = req.param("action") === "register" ? "Registration completed" : "You have been logged successfully, please wait";
-            return res.ok(new SuccessJsonResponse(user, message));
+            return res.ok(new Responses.prototype.NormalizedJson(user, message));
           }
         });
       }

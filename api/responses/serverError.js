@@ -20,9 +20,9 @@ module.exports = serverError = function(err, viewOrRedirect) {
   var locals, readabilify, req, res, sendJSON, viewReady;
   sendJSON = function(data) {
     if (req.options.jsonp && !req.isSocket) {
-      return res.jsonp(new ErrorResponse(data));
+      return res.jsonp(new Responses.prototype.ErrorJson(data));
     } else {
-      return res.json(new ErrorResponse(data));
+      return res.json(new Responses.prototype.ErrorJson(data));
     }
   };
   req = this.req;

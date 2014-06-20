@@ -22,7 +22,7 @@ module.exports = sendOK = function(data, viewOrRedirect) {
   var locals, req, res, sendJSON, viewReady;
   sendJSON = function(data) {
     if (req.options.jsonp && !req.isSocket) {
-      return res.jsonp(new SuccessJsonResponse(data));
+      return res.jsonp(data);
     } else {
       return res.json(data);
     }
