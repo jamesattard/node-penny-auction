@@ -12,8 +12,12 @@ describe "AuthController", (done)->
 
   # cleanup test results
   after (done)->
-    User.destroy({like: {username: "%#{testingUsernamePattern}%"}}).exec (err)->
-      done()
+    User.destroy({like: {username: "%#{testingUsernamePattern}%"}}).exec (err, deletedUsers)->
+      async.each deletedUsers, (user, callback)->
+        Passport.destroy({user: user.id}).exec ->
+          callback()
+      , ->
+        done()
 
   testingUsernamePattern = 'register-testing-user'
 

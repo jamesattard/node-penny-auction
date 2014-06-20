@@ -1,4 +1,4 @@
-class ValidationError
+class ValidationError extends SerializableError
   constructor: ->
     if arguments.length is 0
       throw DevError "No arguments passed to ValidationError constructor"

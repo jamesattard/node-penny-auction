@@ -1,3 +1,27 @@
+###
+  The ErrorResponse class is designed to construct error response
+
+  It can handle following data passed to its constructor:(as single object or array of these objects)
+    * String - will be serialized to hash like that has following format
+      {
+        errorType: 'string',
+        message: "....."
+      }
+    * Error or class derived from Error (std javascript exception error)- will be serialized to hash like that has following format
+      {
+        errorType: 'exception',
+        message: "....."
+      }
+    * Instance of any class derived from SerializableError class (toJSON() will be called to get error's data for response)
+      all childs of SerializableError class implements toJSON() function that will be used to serialize array
+
+  @example
+    new ErrorResponse "User not found"
+    new ErrorResponse new Error "User not found"
+    new ErrorResponse new ValidationError "email", "Please enter email"
+
+    new ErrorResponse ["User not found", new Error("User not found"), new ValidationError("email", "Please enter email"), ]
+###
 _ = require("underscore")
 
 class ErrorResponse
@@ -18,17 +42,19 @@ class ErrorResponse
     }
   ###
   _prepareErrorsForSending: (inErrors) ->
-    # 1. inErrors is array
+
     errors = []
 
+    # 1. inErrors is array
     if _.isArray inErrors
       # translate messages and response with serverError
       for error in inErrors
-        errors = @_smartPush @_normalizeError(error), errors
-#        errors.push @_normalizeError(error)
+        errorJson = @_normalizeError(error)
+        errors = @_smartPush errorJson, errors if errorJson
+    # 2. inErrors is object
     else
-#      errors.push @_normalizeError(inErrors)
-      errors = @_smartPush @_normalizeError(inErrors), errors
+      errorJson = @_normalizeError(inErrors)
+      errors = @_smartPush errorJson, errors if errorJson
 
     errors
 
@@ -42,17 +68,26 @@ class ErrorResponse
     # Scenarion 1.2
     # inError is instance of Error
     else if inError instanceof Error
-      errorNormalized =
-        errorType : 'exception'
-        messages  : inError.message
+      if sails.config.environment isnt 'production'
+        errorNormalized =
+          errorType : 'exception'
+          message  : inError.message
+      else
+        errorNormalized = false
 
     # 1.3 of validation errors
-    else if (_.isObject inError) and (_.isFunction inError.toJSON)
+    else if (inError instanceof SerializableError)
       errorNormalized = inError.toJSON()
 
     errorNormalized
 
 
+  ###
+    pushes inSrc to ioDest if inSrc is flat object
+    merges inSrc into ioDest if inSrc is array
+
+    @returns ioDest with added/merged inSrc
+  ###
   _smartPush: (inSrc, ioDest)->
     # if inSrc is array then merge it to ioDest
     if _.isArray inSrc

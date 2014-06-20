@@ -36,6 +36,17 @@ class ErrorResponseMock
 
     @
 
+  addException: (message)->
+    @errors.push
+      errorType: 'exception'
+      message: message
+
+    @
+
+  addCustom: (errorData)->
+    @errors.push errorData
+    @
+
   addValidation: (field, messages)->
     messages = [messages] unless _.isArray messages
     @errors.push
