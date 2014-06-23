@@ -14,6 +14,9 @@ module.exports = {
       collection: "Passport",
       via: "user"
     },
+    roles: {
+      type: 'array'
+    },
     toJSON: function() {
       var data;
       data = this.toObject();

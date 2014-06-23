@@ -14,6 +14,8 @@ module.exports =
       collection: "Passport"
       via: "user"
 
+    roles:
+      type: 'array'
 
     toJSON: ->
       data = @toObject()

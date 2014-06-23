@@ -13,5 +13,19 @@
   "Please enter the same value": "Please enter the same value",
   "Registration completed": "Registration completed",
   "Incorrect email or password": "Incorrect email or password",
-  "You have been logged successfully, please wait": "You have been logged successfully, please wait"
+  "You have been logged successfully, please wait": "You have been logged successfully, please wait",
+
+  "You are not authorized to perform this request": "You are not authorized to perform this request",
+  "Max lenght of titile is 100 symbols": "Max lenght of titile is 100 symbols",
+  "Please enter title": "Please enter title",
+  "Please enter description": "Please enter description",
+  "Please enter start price": "Please enter start price",
+  "Please enter retailer price": "Please enter retailer price",
+  "Please select when auction starts": "Please select when auction starts",
+  "Please select when auction expires": "Please select when auction expires",
+  "You must upload 1 image at least": "You must upload 1 image at least",
+  "You can upload maximum 6 images": "You can upload maximum 6 images",
+  "Unable to copy images from temp directory": "Unable to copy images from temp directory"
+
+
 }
