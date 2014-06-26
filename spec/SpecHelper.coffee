@@ -19,7 +19,10 @@ before (done)->
     console.log "Sails lifted with error", err if err
     app = liftedSails
     GLOBAL.app = app
-    GLOBAL.gRegisterUrl = "#{app.config.app.baseUrl}/api/auth/local/register"
+    GLOBAL.gEnvConfig =
+      registerUrl : "#{app.config.app.baseUrl}/api/auth/local/register"
+      loginUrl    : "#{app.config.app.baseUrl}/api/auth/local"
+      logoutUrl   : "#{app.config.app.baseUrl}/api/auth/logout"
     done(err, liftedSails)
 
 after (done)->

@@ -6,8 +6,8 @@ module.exports.app = {
 
   auth: {
     defaultAdmin: {
-      email: 'admin@example.com',
-      password: 'suckmydick'
+      identifier: 'admin@example.com',
+      password: 'suckmyduck'
     }
   }
 }
