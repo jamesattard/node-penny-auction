@@ -117,6 +117,7 @@ exports.login = (req, identifier, password, next) ->
     query.email = identifier
   else
     query.username = identifier
+  console.log "query", query
   User.findOne query, (err, user) ->
     return next(err)  if err
     unless user
@@ -139,8 +140,3 @@ exports.login = (req, identifier, password, next) ->
 
       else
         next "Error.Passport.Password.NotSet"
-      return
-
-    return
-
-  return

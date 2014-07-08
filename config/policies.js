@@ -13,6 +13,11 @@
  * http://sailsjs.org/#!documentation/
  */
 
+var _ =  require('underscore');
+
+var authedUserPolicies  = ['sessionAuth', 'passport' ];
+//admin policies extends logged user policies
+var adminUserPolicies   = _.union(authedUserPolicies, ['isAdmin']);
 
 module.exports.policies = {
 
@@ -20,6 +25,9 @@ module.exports.policies = {
   // (`true` allows public access)
   '*': [ 'passport' ],
 
+  AuctionController: {
+    create: adminUserPolicies
+  }
 	// Here's an example of mapping some policies to run before
   // a controller and its actions
 	// RabbitController: {

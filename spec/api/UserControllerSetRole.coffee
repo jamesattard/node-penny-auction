@@ -111,7 +111,7 @@ describe "The UserController::set-role function", (done)->
     it "if all fields are valid [UCSR-0006]", ->
       usernamePattern = "set-role-test"
       password        = "12345678"
-      utils.regUser usernamePattern, password, (err, user)=>
+      utils.auth.regUser usernamePattern, password, (err, user)=>
         expect(err).to.be.equal(null)
         if err
           done()

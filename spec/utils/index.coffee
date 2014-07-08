@@ -1,7 +1,6 @@
-exports =
-  mocks : require('./mocks')
-  i18n  : require('./i18n')
-  auth  : require('./authHelper')
+exports.mocks = require('./mocks')
+exports.i18n  = require('./i18n')
+exports.auth  = require('./authHelper')
 
 exports.jsonParseSafe = (json)->
   if json

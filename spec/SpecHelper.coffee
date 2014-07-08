@@ -23,6 +23,7 @@ before (done)->
       registerUrl : "#{app.config.app.baseUrl}/api/auth/local/register"
       loginUrl    : "#{app.config.app.baseUrl}/api/auth/local"
       logoutUrl   : "#{app.config.app.baseUrl}/api/auth/logout"
+      auctionsUrl : "#{app.config.app.baseUrl}/api/auctions"
     done(err, liftedSails)
 
 after (done)->

@@ -131,11 +131,13 @@ AuthController =
           if err
             return res.serverError err
           else
-            message = if req.param("action") is "register"
-              "Registration completed"
+           if req.param("action") is "register"
+              res.created new Responses::NormalizedJson user, "Registration completed"
             else
-              "You have been logged successfully, please wait"
-            res.ok new Responses::NormalizedJson user, message
+              req.session.authenticated = true
+              console.log "req.session", req.session
+              res.ok new Responses::NormalizedJson user, "You have been logged successfully, please wait"
+
 
 
 module.exports = AuthController

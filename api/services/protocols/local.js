@@ -130,19 +130,20 @@ exports.login = function(req, identifier, password, next) {
   } else {
     query.username = identifier;
   }
-  User.findOne(query, function(err, user) {
+  console.log("query", query);
+  return User.findOne(query, function(err, user) {
     if (err) {
       return next(err);
     }
     if (!user) {
       return next("Incorrect email or password");
     }
-    Passport.findOne({
+    return Passport.findOne({
       protocol: "local",
       user: user.id
     }, function(err, passport) {
       if (passport) {
-        passport.validatePassword(password, function(err, res) {
+        return passport.validatePassword(password, function(err, res) {
           if (err) {
             return next(err);
           }
@@ -153,7 +154,7 @@ exports.login = function(req, identifier, password, next) {
           }
         });
       } else {
-        next("Error.Passport.Password.NotSet");
+        return next("Error.Passport.Password.NotSet");
       }
     });
   });

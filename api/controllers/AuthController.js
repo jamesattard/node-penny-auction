@@ -126,12 +126,16 @@ AuthController = {
         return res.serverError(err);
       } else {
         return req.login(user, function(err) {
-          var message;
           if (err) {
             return res.serverError(err);
           } else {
-            message = req.param("action") === "register" ? "Registration completed" : "You have been logged successfully, please wait";
-            return res.ok(new Responses.prototype.NormalizedJson(user, message));
+            if (req.param("action") === "register") {
+              return res.created(new Responses.prototype.NormalizedJson(user, "Registration completed"));
+            } else {
+              req.session.authenticated = true;
+              console.log("req.session", req.session);
+              return res.ok(new Responses.prototype.NormalizedJson(user, "You have been logged successfully, please wait"));
+            }
           }
         });
       }
