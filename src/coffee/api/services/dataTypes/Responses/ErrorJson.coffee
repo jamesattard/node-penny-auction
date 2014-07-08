@@ -59,11 +59,15 @@ class ErrorJson
     errors
 
   _normalizeError: (inError)->
+    console.log "typeof inError",    inError.toJSON()
     # 1.1 of strings
     if typeof inError is 'string'
       errorNormalized =
         errorType: 'string'
         message: sails.__( inError )
+
+    else if inError instanceof  WLValidationError
+      errorNormalized = (new ValidationError inError.invalidAttributes).toJSON()
 
     # Scenarion 1.2
     # inError is instance of Error
@@ -75,11 +79,19 @@ class ErrorJson
       else
         errorNormalized = false
 
-    # 1.3 of validation errors
+    # 1.3 of SerializableError
     else if (inError instanceof SerializableError)
       errorNormalized = inError.toJSON()
 
     errorNormalized
+
+
+#  _parseWLValidationError: (inError)->
+#    for field, details of inError.invalidAttributes
+#      messages = []
+#      for detail in details
+#        messages.push(detail.message)
+
 
 
   ###

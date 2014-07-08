@@ -9,7 +9,6 @@ Assumes that your login action in one of your controllers sets `req.session.auth
 @docs        :: http://sailsjs.org/#!documentation/policies
  */
 module.exports = function(req, res, next) {
-  console.log("req.session.authenticated", req.session);
   if (req.session.authenticated) {
     return next();
   }

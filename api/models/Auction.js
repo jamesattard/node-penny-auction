@@ -3,10 +3,12 @@ module.exports = {
   schema: true,
   attributes: {
     title: {
-      type: "string"
+      type: "string",
+      required: true
     },
     description: {
-      type: "string"
+      type: "string",
+      required: true
     },
     startPrice: {
       type: "int"

@@ -21,14 +21,19 @@ module.exports = badRequest = (err, viewOrRedirect) ->
 
   # Serve JSON (with optional JSONP support)
   sendJSON = (data) ->
-    unless data
-      res.send()
+    normData = new Responses::ErrorJson data
+    if req.options.jsonp and not req.isSocket
+      res.jsonp normData
     else
-      data = error: data  if typeof data isnt "object" or data instanceof Error
-      if req.options.jsonp and not req.isSocket
-        res.jsonp data
-      else
-        res.json data
+      res.json normData
+#    unless data
+#      res.send()
+#    else
+#      data = error: data  if typeof data isnt "object" or data instanceof Error
+#      if req.options.jsonp and not req.isSocket
+#        res.jsonp data
+#      else
+#        res.json data
   req = @req
   res = @res
 

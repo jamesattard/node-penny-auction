@@ -71,11 +71,14 @@ ErrorJson = (function() {
 
   ErrorJson.prototype._normalizeError = function(inError) {
     var errorNormalized;
+    console.log("typeof inError", inError.toJSON());
     if (typeof inError === 'string') {
       errorNormalized = {
         errorType: 'string',
         message: sails.__(inError)
       };
+    } else if (inError instanceof WLValidationError) {
+      errorNormalized = (new ValidationError(inError.invalidAttributes)).toJSON();
     } else if (inError instanceof Error) {
       if (sails.config.environment !== 'production') {
         errorNormalized = {

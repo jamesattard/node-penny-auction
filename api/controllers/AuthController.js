@@ -133,8 +133,8 @@ AuthController = {
               return res.created(new Responses.prototype.NormalizedJson(user, "Registration completed"));
             } else {
               req.session.authenticated = true;
-              console.log("req.session", req.session);
-              return res.ok(new Responses.prototype.NormalizedJson(user, "You have been logged successfully, please wait"));
+              req.session.userRoles = user.roles;
+              return res.ok(new Responses.prototype.NormalizedJson(user), "You have been logged successfully, please wait");
             }
           }
         });

@@ -1,4 +1,5 @@
 validator = require("validator")
+_ = require("underscore")
 
 ###
 Local Authentication Protocol
@@ -117,26 +118,32 @@ exports.login = (req, identifier, password, next) ->
     query.email = identifier
   else
     query.username = identifier
-  console.log "query", query
   User.findOne query, (err, user) ->
     return next(err)  if err
-    unless user
-#      if isEmail
-#        error = "Error.Passport.Email.NotFound"
-#      else
-#        error = "Error.Passport.Username.NotFound"
-      return next("Incorrect email or password")
-    Passport.findOne
-      protocol: "local"
-      user: user.id
-    , (err, passport) ->
-      if passport
-        passport.validatePassword password, (err, res) ->
-          return next(err)  if err
-          unless res
-            next "Error.Passport.Password.Wrong"
-          else
-            next null, user
+    if user
+      Passport.findOne
+        protocol: "local"
+        user: user.id
+      , (err, passport) ->
+        if passport
+          passport.validatePassword password, (err, res) ->
+            return next(err)  if err
+            unless res
+              next "Error.Passport.Password.Wrong"
+            else
+              next null, user
 
+        else
+          next "Error.Passport.Password.NotSet"
+    else
+      if (identifier is sails.config.app.auth.defaultAdmin.email) and (password is sails.config.app.auth.defaultAdmin.password)
+        defAdminData = _.clone(sails.config.app.auth.defaultAdmin)
+        delete defAdminData.password
+#          id: sails.config.app.auth.defaultAdmin.id
+#          username: sails.config.app.auth.defaultAdmin.username
+#          email: sails.config.app.auth.defaultAdmin.email
+        return next null, defAdminData
       else
-        next "Error.Passport.Password.NotSet"
+        return next("Incorrect email or password")
+
+

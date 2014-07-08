@@ -1,3 +1,7 @@
+###
+  @example new ValidationError field, messages
+  @example new ValidationError WLValidationError
+###
 class ValidationError extends SerializableError
   constructor: ->
     if arguments.length is 0
@@ -8,7 +12,7 @@ class ValidationError extends SerializableError
     if arguments.length is 2
       @_addNew arguments[0], arguments[1]
     else if arguments.length is 1
-      @_parseModeValidations arguments[0]
+      @_parseModelValidations arguments[0]
 
 
   toJSON: ->
@@ -22,7 +26,7 @@ class ValidationError extends SerializableError
       field     : field
       messages  : messages
 
-  _parseModeValidations: (validationErrors) ->
+  _parseModelValidations: (validationErrors) ->
     for field, details of validationErrors
       messages = []
       for detail in details

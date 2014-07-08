@@ -32,7 +32,7 @@ describe "POST request to auction controller", (done)->
 
         done()
 
-    it.only "if user is logged in but doesn't have admin privileges", (done)->
+    it "if user is logged in but doesn't have admin privileges", (done)->
 
       utils.auth.regUserAndLogin identifier, "12345678", (err, user)=>
         expect(err).to.be.equal(null)
@@ -45,7 +45,21 @@ describe "POST request to auction controller", (done)->
 
           done()
 
-  describe "[ACP-0002, ACP-0003] returns 400 status code and ValidationError", (done)->
+  describe "[ACP-0002, ACP-0003] returns 400(\"Bad Request\") status code and ValidationError", (done)->
+    it.only "if title is absent", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        delete @_auctionForm.title
+#        delete @_auctionForm.description
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "title", __("Please enter title") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
 
 
 

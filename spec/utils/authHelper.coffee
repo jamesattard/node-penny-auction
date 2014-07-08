@@ -6,8 +6,8 @@ exports.login  =  login = (identifier, password, done)->
     identifier: identifier
     password: password
   request.post gEnvConfig.loginUrl, {form: formData}, (err, response, body)->
-    console.log "body", body
     if err
+      console.log "login::err", err
       done err
     else
       if response.statusCode is 200
@@ -16,7 +16,7 @@ exports.login  =  login = (identifier, password, done)->
         done utils.jsonParseSafe(body)
 
 exports.loginDefaultAdmin  = (done)->
-  login app.config.app.auth.defaultAdmin.identifier,  app.config.app.auth.defaultAdmin.password, done
+  login app.config.app.auth.defaultAdmin.email,  app.config.app.auth.defaultAdmin.password, done
 
 
 

@@ -127,16 +127,17 @@ AuthController =
         return res.serverError err
       else
         req.login user, (err) ->
-#          console.log "err", err
+#          console.log "err", req.user
           if err
             return res.serverError err
           else
-           if req.param("action") is "register"
+            if req.param("action") is "register"
               res.created new Responses::NormalizedJson user, "Registration completed"
             else
               req.session.authenticated = true
-              console.log "req.session", req.session
-              res.ok new Responses::NormalizedJson user, "You have been logged successfully, please wait"
+              req.session.userRoles     = user.roles
+#              console.log "req.session", req.session
+              res.ok new Responses::NormalizedJson(user), "You have been logged successfully, please wait"
 
 
 
