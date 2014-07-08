@@ -8,5 +8,14 @@ exports.messages = {
   "startPrice.numeric": "Start price must be numeric",
   "retailerPrice.numeric": "Retailer price must be numeric",
   "startPrice.min": "Start price must be more than 0.01",
-  "retailerPrice.min": "Retailer price must be more than 0.01"
+  "retailerPrice.min": "Retailer price must be more than 0.01",
+  "startsAt.required": "Please select when auction starts",
+  "startsAt.datetime": "Auction start must be datetime",
+  "expiresAt.required": "Please select when auction expires",
+  "expiresAt.datetime": "Auction expiration time must be datetime",
+  "images.arrayMinLen": "You must upload 1 image at least",
+  "images.arrayMaxLen": "You can upload maximum 6 images",
+  "images.required": "Please upload images",
+  "images.array": "Incorrect format of images list",
+  "images.imagesValid": "Unable to copy images from temp directory"
 };

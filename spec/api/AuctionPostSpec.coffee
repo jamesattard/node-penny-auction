@@ -187,6 +187,111 @@ describe "POST request to auction controller", (done)->
 
 
 
+    it  "if startsAt is absent", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        delete @_auctionForm.startsAt
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "startsAt", [__("Please select when auction starts"),
+                                                                                __("Auction start must be datetime")] )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if startsAt is not datetime", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.startsAt = "a3ss"
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "startsAt",  __("Auction start must be datetime") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+
+
+    it  "if expiresAt is absent", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        delete @_auctionForm.expiresAt
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "expiresAt", [__("Please select when auction expires"),
+                                                                           __("Auction expiration time must be datetime")] )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if expiresAt is not datetime", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.expiresAt = "a3ss6s"
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "expiresAt",  __("Auction expiration time must be datetime") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+
+
+    it  "if images is absent", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        delete @_auctionForm.images
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "images",  [__( "Please upload images"),
+                                                                          __( "Incorrect format of images list"),
+                                                                          __( "You must upload 1 image at least")] )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if images array contains 7 items", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg']
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "images",  [ __( "You can upload maximum 6 images")] )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+
+    it.only  "if all images dont exist in tmp dir", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.images = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg']
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "images",  [ __( "Unable to copy images from temp directory")] )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+
+
+
+
+
 
 
 
