@@ -16,6 +16,7 @@
       }
     * Instance of any class derived from SerializableError class (toJSON() will be called to get error's data for response)
       all childs of SerializableError class implements toJSON() function that will be used to serialize array
+    * Instance of Waterline Validation error (WLValidationError)
 
   @example
     new ErrorJson "User not found"
@@ -71,14 +72,14 @@ ErrorJson = (function() {
 
   ErrorJson.prototype._normalizeError = function(inError) {
     var errorNormalized;
-    console.log("typeof inError", inError.toJSON());
+    console.log("typeof inError", JSON.stringify(inError), inError.toJSON());
     if (typeof inError === 'string') {
       errorNormalized = {
         errorType: 'string',
         message: sails.__(inError)
       };
     } else if (inError instanceof WLValidationError) {
-      errorNormalized = (new ValidationError(inError.invalidAttributes)).toJSON();
+      errorNormalized = (new ValidationError(inError)).toJSON();
     } else if (inError instanceof Error) {
       if (sails.config.environment !== 'production') {
         errorNormalized = {

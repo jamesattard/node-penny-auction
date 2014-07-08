@@ -5,6 +5,7 @@ module.exports =
     title:
       type: "string"
       required: true
+      maxLength: 100
 
     description:
       type: "string"

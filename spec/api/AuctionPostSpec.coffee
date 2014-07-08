@@ -50,7 +50,9 @@ describe "POST request to auction controller", (done)->
       utils.auth.loginDefaultAdmin (err, user)=>
         expect(err).to.be.equal(null)
 
-        delete @_auctionForm.title
+        for i in [0..150]
+          @_auctionForm.title += "#{i}"
+#        delete @_auctionForm.title
 #        delete @_auctionForm.description
         request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
           expect(response.statusCode).to.be.equal(400)

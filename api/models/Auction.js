@@ -4,7 +4,8 @@ module.exports = {
   attributes: {
     title: {
       type: "string",
-      required: true
+      required: true,
+      maxLength: 100
     },
     description: {
       type: "string",

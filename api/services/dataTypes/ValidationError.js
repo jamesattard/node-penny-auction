@@ -4,9 +4,11 @@
   @example new ValidationError field, messages
   @example new ValidationError WLValidationError
  */
-var ValidationError,
+var ValidationError, validationMessages,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+validationMessages = require("../../validations");
 
 ValidationError = (function(_super) {
   __extends(ValidationError, _super);
@@ -38,14 +40,15 @@ ValidationError = (function(_super) {
     });
   };
 
-  ValidationError.prototype._parseModelValidations = function(validationErrors) {
-    var detail, details, field, messages, _i, _len;
-    for (field in validationErrors) {
-      details = validationErrors[field];
+  ValidationError.prototype._parseModelValidations = function(inError) {
+    var detail, details, field, messages, _i, _len, _ref;
+    _ref = inError.invalidAttributes;
+    for (field in _ref) {
+      details = _ref[field];
       messages = [];
       for (_i = 0, _len = details.length; _i < _len; _i++) {
         detail = details[_i];
-        messages.push(detail.message);
+        messages.push(validationMessages.get(inError.model, "" + field + "." + detail.rule));
       }
       this._addNew(field, messages);
     }

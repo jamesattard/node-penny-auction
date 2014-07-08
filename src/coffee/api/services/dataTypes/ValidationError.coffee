@@ -2,6 +2,9 @@
   @example new ValidationError field, messages
   @example new ValidationError WLValidationError
 ###
+
+validationMessages = require("../../validations")
+
 class ValidationError extends SerializableError
   constructor: ->
     if arguments.length is 0
@@ -26,11 +29,11 @@ class ValidationError extends SerializableError
       field     : field
       messages  : messages
 
-  _parseModelValidations: (validationErrors) ->
-    for field, details of validationErrors
+  _parseModelValidations: (inError) ->
+    for field, details of inError.invalidAttributes
       messages = []
       for detail in details
-        messages.push(detail.message)
+        messages.push(validationMessages.get( inError.model, "#{field}.#{detail.rule}") )#(detail.message)
 
       @_addNew field, messages
 
