@@ -46,14 +46,11 @@ describe "POST request to auction controller", (done)->
           done()
 
   describe "[ACP-0002, ACP-0003] returns 400(\"Bad Request\") status code and ValidationError", (done)->
-    it.only "if title is absent", (done)->
+    it  "if title is absent", (done)->
       utils.auth.loginDefaultAdmin (err, user)=>
         expect(err).to.be.equal(null)
 
-        for i in [0..150]
-          @_auctionForm.title += "#{i}"
-#        delete @_auctionForm.title
-#        delete @_auctionForm.description
+        delete @_auctionForm.title
         request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
           expect(response.statusCode).to.be.equal(400)
 
@@ -61,6 +58,136 @@ describe "POST request to auction controller", (done)->
           expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
 
           done()
+
+    it "if title is empty", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.title = ""
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "title", __("Please enter title") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if title's lenght is > 100", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.title = ""
+        for i in [0..100]
+          @_auctionForm.title += "+"
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "title", __("Max lenght of titile is 100 symbols") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if description is absent", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        delete @_auctionForm.description
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "description", __("Please enter description") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+
+    it "if startPrice is absent", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        delete @_auctionForm.startPrice
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "startPrice", [__("Please enter start price"),
+                                                                             __("Start price must be numeric")] )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if startPrice is not numeric", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.startPrice = "as"
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "startPrice",  __("Start price must be numeric") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if startPrice is not numeric", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.startPrice = -1
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "startPrice",  __("Start price must be more than 0.01") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+
+
+
+    it  "if retailerPrice is absent", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        delete @_auctionForm.retailerPrice
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "retailerPrice", [__("Please enter retailer price"),
+                                                                             __("Retailer price must be numeric")] )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it  "if retailerPrice is not numeric", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.retailerPrice = "as"
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "retailerPrice",  __("Retailer price must be numeric") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+    it "if retailerPrice is not numeric", (done)->
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.retailerPrice = -1
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          expect(response.statusCode).to.be.equal(400)
+
+          errors = errorResponseMock.factory().addValidation( "retailerPrice",  __("Retailer price must be more than 0.01") )
+          expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
+
+          done()
+
+
+
+
+
 
 
 

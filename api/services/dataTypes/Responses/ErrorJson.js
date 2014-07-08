@@ -72,7 +72,6 @@ ErrorJson = (function() {
 
   ErrorJson.prototype._normalizeError = function(inError) {
     var errorNormalized;
-    console.log("typeof inError", JSON.stringify(inError), inError.toJSON());
     if (typeof inError === 'string') {
       errorNormalized = {
         errorType: 'string',

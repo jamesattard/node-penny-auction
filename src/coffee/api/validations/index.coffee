@@ -3,5 +3,7 @@ module.exports =
     "Auction": require('./Auction.js').messages
 
   get: (inModelName, inMessage)->
-    console.log "@modelMessages",@modelMessages
-    @modelMessages[inModelName][inMessage]
+    if @modelMessages[inModelName][inMessage]?
+      @modelMessages[inModelName][inMessage]
+    else
+      inMessage

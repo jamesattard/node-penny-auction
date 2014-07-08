@@ -3,27 +3,32 @@ module.exports = {
   schema: true,
   attributes: {
     title: {
-      type: "string",
       required: true,
       maxLength: 100
     },
     description: {
-      type: "string",
       required: true
     },
     startPrice: {
-      type: "int"
+      required: true,
+      type: "numeric",
+      min: 0.01
     },
     retailerPrice: {
-      type: "int"
+      required: true,
+      type: "numeric",
+      min: 0.01
     },
     startsAt: {
+      required: true,
       type: "datetime"
     },
     expiresAt: {
+      required: true,
       type: "datetime"
     },
     images: {
+      required: true,
       type: 'array'
     }
   }

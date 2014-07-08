@@ -4,7 +4,10 @@ module.exports = {
     "Auction": require('./Auction.js').messages
   },
   get: function(inModelName, inMessage) {
-    console.log("@modelMessages", this.modelMessages);
-    return this.modelMessages[inModelName][inMessage];
+    if (this.modelMessages[inModelName][inMessage] != null) {
+      return this.modelMessages[inModelName][inMessage];
+    } else {
+      return inMessage;
+    }
   }
 };

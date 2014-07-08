@@ -60,7 +60,7 @@ class ErrorJson
     errors
 
   _normalizeError: (inError)->
-    console.log "typeof inError", JSON.stringify(inError),   inError.toJSON()
+#    console.log "typeof inError", JSON.stringify(inError),   inError.toJSON()
     # 1.1 of strings
     if typeof inError is 'string'
       errorNormalized =
