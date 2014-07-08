@@ -4,7 +4,9 @@ utils   = require('../utils/index')
 __ = i18n.__
 errorResponseMock = mocks.api.errorResponse
 
-describe "[ACP-0001] POST request to auction controller", (done)->
+describe "POST request to auction controller", (done)->
+
+  identifier = "auction-post-user"
 
   beforeEach ->
     @_auctionForm =
@@ -16,7 +18,11 @@ describe "[ACP-0001] POST request to auction controller", (done)->
       expiresAt: new Date
       images: ['1.jpg', '2.jpg']
 
-  describe "returns 401 status code and StringError ", (done)->
+  afterEach: (done)->
+    utils.auth.logout ->
+      User.destroy({username: identifier}).exec done
+
+  describe "[ACP-0001] returns 401 status code and StringError ", (done)->
     it "if user is not logged in", ->
       request.post gEnvConfig.auctionPostUrl, {form: @_auctionForm}, (error, response, body)->
         expect(response.statusCode).to.be.equal(401)
@@ -27,7 +33,7 @@ describe "[ACP-0001] POST request to auction controller", (done)->
         done()
 
     it.only "if user is logged in but doesn't have admin privileges", (done)->
-      identifier = "auction-post-user"
+
       utils.auth.regUserAndLogin identifier, "12345678", (err, user)=>
         expect(err).to.be.equal(null)
         request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
@@ -38,4 +44,9 @@ describe "[ACP-0001] POST request to auction controller", (done)->
           expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
 
           done()
+
+  describe "[ACP-0002, ACP-0003] returns 400 status code and ValidationError", (done)->
+
+
+
 
