@@ -12,10 +12,10 @@ describe "POST request to auction controller", (done)->
     @_auctionForm =
       title: 'auction title'
       description: "description"
-      startPrice: 123
-      retailerPrice: 345
-      startsAt: new Date
-      expiresAt: new Date
+      startPrice: "123.3"
+      retailerPrice: "345.3"
+      startsAt: (new Date).toISOString()
+      expiresAt: (new Date).toISOString()
       images: ['1.jpg', '2.jpg']
 
   afterEach: (done)->
@@ -274,7 +274,7 @@ describe "POST request to auction controller", (done)->
           done()
 
 
-    it.only  "if all images dont exist in tmp dir", (done)->
+    it "if all images don't exist in tmp dir", (done)->
       utils.auth.loginDefaultAdmin (err, user)=>
         expect(err).to.be.equal(null)
 
@@ -287,6 +287,71 @@ describe "POST request to auction controller", (done)->
 
           done()
 
+
+  describe "[ACP-0004] returns 201 status code, copy mages and created auction data ", (done)->
+
+    it "if all the data is valid and  flat JSON format is requested", (done)->
+      #copy some image to tmp dir
+      fileName = (new Date).getTime() + ".png"
+      fs.createReadStream("#{app.config.app.baseDir }/spec/logo_big.png")
+      .pipe(fs.createWriteStream("#{app.config.app.tmpDir}/#{fileName}"))
+
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.images = [fileName, "1.png"]
+        request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)=>
+          expect(response.statusCode).to.be.equal(201)
+
+          responseBody  = utils.jsonParseSafe(body)
+          auctionId     = responseBody.id
+          #check if image was copied
+          expect( fs.existsSync("#{app.config.app.baseDir }/uploads/auctions/#{auctionId}/#{fileName}") ).to.be.true
+
+          expect(responseBody.id).to.exist
+          expect(responseBody.createdAt).to.exist
+          expect(responseBody.updatedAt).to.exist
+
+          @_auctionForm.images = _.without @_auctionForm.images, "1.png"
+
+          @_auctionForm.id        = responseBody.id
+          @_auctionForm.createdAt = responseBody.createdAt
+          @_auctionForm.updatedAt = responseBody.updatedAt
+          expect(responseBody).to.deep.equal(@_auctionForm)
+
+          done()
+
+
+    it "if all the data is valid and  jsonapi JSON format is requested", (done)->
+      #copy some image to tmp dir
+      fileName = (new Date).getTime() + ".png"
+      fs.createReadStream("#{app.config.app.baseDir }/spec/logo_big.png")
+      .pipe(fs.createWriteStream("#{app.config.app.tmpDir}/#{fileName}"))
+
+      utils.auth.loginDefaultAdmin (err, user)=>
+        expect(err).to.be.equal(null)
+
+        @_auctionForm.images = [fileName, "1.png"]
+        request.post gEnvConfig.auctionsUrl + "?jsonFormat=jsonapi", {form: @_auctionForm}, (error, response, body)=>
+          expect(response.statusCode).to.be.equal(201)
+
+          responseBody  = utils.jsonParseSafe(body)
+          auctionId     = responseBody.auction.id
+          #check if image was copied
+          expect( fs.existsSync("#{app.config.app.baseDir }/uploads/auctions/#{auctionId}/#{fileName}") ).to.be.true
+
+          expect(responseBody.auction.id).to.exist
+          expect(responseBody.auction.createdAt).to.exist
+          expect(responseBody.auction.updatedAt).to.exist
+
+          @_auctionForm.images = _.without @_auctionForm.images, "1.png"
+
+          @_auctionForm.id        = responseBody.auction.id
+          @_auctionForm.createdAt = responseBody.auction.createdAt
+          @_auctionForm.updatedAt = responseBody.auction.updatedAt
+          expect(responseBody).to.deep.equal({auction: @_auctionForm})
+
+          done()
 
 
 

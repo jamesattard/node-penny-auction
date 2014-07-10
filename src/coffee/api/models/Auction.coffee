@@ -1,4 +1,5 @@
 _ = require("underscore")
+mkdirp = require('mkdirp')
 
 module.exports =
   # Enforce model schema in the case of schemaless databases
@@ -10,13 +11,19 @@ module.exports =
     arrayMaxLen: (arr, len)->
       # added 'not array' condition to show only arrayMinLen's message in case if 'arr' is not array
       (not _.isArray(arr) ) or ( _.isArray(arr) and arr.length <= len )
+
+    ###
+    Checks if images are exists in tmp dir (i.e. if they were uploaded before via AJAX)
+    ###
     imagesValid: (images)->
       valid = 0
+#      validImages = []
       for image in images
-        #copy image
         if fs.existsSync("#{sails.config.app.tmpDir }/#{image}")
           valid++
+#          validImages.push image
 
+#      images = validImages
       if valid is 0
         false
       else
@@ -33,12 +40,12 @@ module.exports =
 
     startPrice:
       required: true
-      type: "numeric"
+      type: "decimal"
       min: 0.01
 
     retailerPrice:
       required: true
-      type: "numeric"
+      type: "decimal"
       min: 0.01
 
     startsAt:
@@ -56,20 +63,38 @@ module.exports =
       arrayMaxLen: 6
       imagesValid: true
 
-#    toJSON: ->
-#      data = @toObject()
-#      delete data.password
-#      data
+    toJSON: (jsonFormat)->
+      data = @toObject()
+      # if client requests response in JsonApi format, then add namespace
+      if jsonFormat is "jsonapi"
+        data =
+          "auction": data
+      data
 
-#  afterValidate: (values, next)->
-#    copied = 0
-#    for image in values.images
-#      #copy image
-#      console.log "#{sails.config.app.tmpDir }/#{image}"
-#      if fs.existsSync("#{sails.config.app.tmpDir }/#{image}")
-#        copied++
-#
-#    if copied is 0
-#      next "Unable to copy images from temp directory"
-#    else
-#      next null
+  afterValidate: (auction, next)->
+    validImages = []
+    for image in auction.images
+      if fs.existsSync("#{sails.config.app.tmpDir }/#{image}")
+        validImages.push image
+
+    auction.images = validImages
+    next null, auction
+
+  ###
+    After auction was created in DB, copy valid images to auctions dir
+
+    NOTE: images were validated by imagesValid rule so all images in DB should be existing
+  ###
+  afterCreate: (newAuction, next)->
+    auctionImagesDir = "#{sails.config.app.baseDir}/uploads/auctions/#{newAuction.id}"
+    mkdirp auctionImagesDir,  (err)->
+      if err
+        next err
+      else
+        for image in newAuction.images
+          #copy image
+          tmpImage = "#{sails.config.app.tmpDir }/#{image}"
+          fs.createReadStream(tmpImage).pipe(fs.createWriteStream("#{auctionImagesDir}/#{image}"))
+          fs.unlink(tmpImage)
+        next()
+

@@ -42,4 +42,4 @@ module.exports = createRecord = (req, res) ->
 
     # Send JSONP-friendly response if it's supported
     # (HTTP 201: Created)
-    res.created newInstance.toJSON()
+    res.created newInstance.toJSON( req.query.jsonFormat )

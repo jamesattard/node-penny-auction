@@ -7,6 +7,7 @@ module.exports.app = {
     port: 1337
   },
 
+  baseDir: path.normalize(__dirname + "/.."),
   tmpDir: path.normalize(__dirname + "/../.tmp"),
   auth: {
     defaultAdmin: {

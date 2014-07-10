@@ -39,6 +39,6 @@ module.exports = createRecord = function(req, res) {
       }
       Model.publishCreate(newInstance, !req.options.mirror && req);
     }
-    return res.created(newInstance.toJSON());
+    return res.created(newInstance.toJSON(req.query.jsonFormat));
   });
 };
