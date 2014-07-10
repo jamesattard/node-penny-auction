@@ -134,7 +134,7 @@ AuthController = {
             } else {
               req.session.authenticated = true;
               req.session.userRoles = user.roles;
-              return res.ok(new Responses.prototype.NormalizedJson(user), "You have been logged successfully, please wait");
+              return res.ok(new Responses.prototype.NormalizedJson(user, "You have been logged successfully, please wait"));
             }
           }
         });

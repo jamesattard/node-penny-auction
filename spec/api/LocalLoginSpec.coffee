@@ -141,10 +141,10 @@ describe "AuthController", (done)->
             done()
 
       describe "according to [LPL-0005] shall return 'NormalizedJson'", ->
-        it "if  login and password are valid and user is exist in DB",  (done)->
+        it.only "if  login and password are valid and user is exist in DB",  (done)->
           request.post @registerUrl, {form: @regData}, (error, response, body)=>
 
-            expect(response.statusCode).to.be.equal(200)
+            expect(response.statusCode).to.be.equal(201)
 
             request.post @loginUrl, {form: @loginData}, (error, response, body)=>
               normalizedJsonResponse =

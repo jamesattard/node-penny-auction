@@ -255,7 +255,8 @@ describe "POST request to auction controller", (done)->
 
           errors = errorResponseMock.factory().addValidation( "images",  [__( "Please upload images"),
                                                                           __( "Incorrect format of images list"),
-                                                                          __( "You must upload 1 image at least")] )
+                                                                          __( "You must upload 1 image at least"),
+                                                                          __("Unable to copy images from temp directory")] )
           expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
 
           done()
@@ -268,7 +269,8 @@ describe "POST request to auction controller", (done)->
         request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
           expect(response.statusCode).to.be.equal(400)
 
-          errors = errorResponseMock.factory().addValidation( "images",  [ __( "You can upload maximum 6 images")] )
+          errors = errorResponseMock.factory().addValidation( "images",  [ __( "You can upload maximum 6 images"),
+                                                                           __("Unable to copy images from temp directory")] )
           expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
 
           done()

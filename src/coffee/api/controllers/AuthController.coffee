@@ -137,7 +137,7 @@ AuthController =
               req.session.authenticated = true
               req.session.userRoles     = user.roles
 #              console.log "req.session", req.session
-              res.ok new Responses::NormalizedJson(user), "You have been logged successfully, please wait"
+              res.ok new Responses::NormalizedJson(user, "You have been logged successfully, please wait")
 
 
 
