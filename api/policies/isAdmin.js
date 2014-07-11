@@ -9,7 +9,7 @@ Assumes that your login action in one of your controllers sets `req.session.auth
 @docs        :: http://sailsjs.org/#!documentation/policies
  */
 module.exports = function(req, res, next) {
-  if (req.session.userRoles.indexOf('admin') !== -1) {
+  if ((req.session.userRoles != null) && (req.session.userRoles.indexOf('admin') !== -1)) {
     return next();
   }
   return res.unauthorized("You are not authorized to perform this request");

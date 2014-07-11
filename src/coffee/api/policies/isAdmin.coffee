@@ -10,7 +10,7 @@ module.exports = (req, res, next) ->
 
   # User is allowed, proceed to the next policy,
   # or if this is the last policy, the controller
-  return next()  if req.session.userRoles.indexOf('admin') isnt -1
+  return next()  if (req.session.userRoles?) and (req.session.userRoles.indexOf('admin') isnt -1)
 
   # User is not allowed
   res.unauthorized "You are not authorized to perform this request"

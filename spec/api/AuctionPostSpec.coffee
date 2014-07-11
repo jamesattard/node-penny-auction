@@ -9,6 +9,10 @@ describe "POST request to auction controller", (done)->
   identifier = "auction-post-user"
 
   beforeEach ->
+    fileName = (new Date).getTime() + ".png"
+    fs.createReadStream("#{app.config.app.baseDir }/spec/logo_big.png")
+      .pipe(fs.createWriteStream("#{app.config.app.tmpDir}/logo.png"))
+
     @_auctionForm =
       title: 'auction title'
       description: "description"
@@ -16,7 +20,7 @@ describe "POST request to auction controller", (done)->
       retailerPrice: "345.3"
       startsAt: (new Date).toISOString()
       expiresAt: (new Date).toISOString()
-      images: ['1.jpg', '2.jpg']
+      images: ['logo.png']
 
   afterEach: (done)->
     utils.auth.logout ->
@@ -24,7 +28,7 @@ describe "POST request to auction controller", (done)->
 
   describe "[ACP-0001] returns 401 status code and StringError ", (done)->
     it "if user is not logged in", ->
-      request.post gEnvConfig.auctionPostUrl, {form: @_auctionForm}, (error, response, body)->
+      request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
         expect(response.statusCode).to.be.equal(401)
 
         errors = errorResponseMock.factory().addString( __("You are not authorized to perform this request") )
@@ -164,6 +168,7 @@ describe "POST request to auction controller", (done)->
 
         @_auctionForm.retailerPrice = "as"
         request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
+          console.log "b", body
           expect(response.statusCode).to.be.equal(400)
 
           errors = errorResponseMock.factory().addValidation( "retailerPrice",  __("Retailer price must be numeric") )
@@ -238,7 +243,7 @@ describe "POST request to auction controller", (done)->
         request.post gEnvConfig.auctionsUrl, {form: @_auctionForm}, (error, response, body)->
           expect(response.statusCode).to.be.equal(400)
 
-          errors = errorResponseMock.factory().addValidation( "expiresAt",  __("Auction expiration time must be datetime") )
+          errors = errorResponseMock.factory().addValidation( "expiresAt",  [__("Auction expiration time must be datetime")] )
           expect(utils.jsonParseSafe(body)).to.deep.equal(errors.get())
 
           done()

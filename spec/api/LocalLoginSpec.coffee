@@ -141,7 +141,7 @@ describe "AuthController", (done)->
             done()
 
       describe "according to [LPL-0005] shall return 'NormalizedJson'", ->
-        it.only "if  login and password are valid and user is exist in DB",  (done)->
+        it "if  login and password are valid and user is exist in DB",  (done)->
           request.post @registerUrl, {form: @regData}, (error, response, body)=>
 
             expect(response.statusCode).to.be.equal(201)
