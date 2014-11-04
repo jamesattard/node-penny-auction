@@ -14,23 +14,42 @@
 //
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
-var cssFilesToInject = [
-  'styles/**/*.css'
-];
+var cssFilesToInject = {
+  backbone:  [
+    'styles/backbone/**/*.css'
+  ]
+};
+//var cssFilesToInject =  [
+//    'styles/**/*.css'
+//];
 
 
 // Client-side javascript files to inject in order
 // (uses Grunt-style wildcard/glob/splat expressions)
-var jsFilesToInject = [
-
-  // Dependencies like sails.io.js, jQuery, or Angular
-  // are brought in here
-  'js/dependencies/**/*.js',
-
-  // All of the rest of your client-side js files
-  // will be injected here in no particular order.
-  'js/**/*.js'
-];
+var jsFilesToInject = {
+  backbone: [
+    // Load sails.io before everything else
+    'js/dependencies/sails.io.js',
+    'bower_components/jquery/dist/jquery.js',
+    'bower_components/underscore/underscore.js',
+    'bower_components/backbone/backbone.js',
+    'js/backbone/models/**/*.js',
+    'js/backbone/views/**/*.js',
+    'js/backbone/**/*.js'
+  ]
+};
+//[
+//
+//  // Load sails.io before everything else
+//  'js/dependencies/sails.io.js',
+//
+//  // Dependencies like jQuery, or Angular are brought in here
+//  'js/dependencies/**/*.js',
+//
+//  // All of the rest of your client-side js files
+//  // will be injected here in no particular order.
+//  'js/**/*.js'
+//];
 
 
 // Client-side HTML templates are injected using the sources below
@@ -51,12 +70,23 @@ var templateFilesToInject = [
 // Prefix relative paths to source files so they point to the proper locations
 // (i.e. where the other Grunt tasks spit them out, or in some cases, where
 // they reside in the first place)
-module.exports.cssFilesToInject = cssFilesToInject.map(function(path) {
-  return '.tmp/public/' + path;
-});
-module.exports.jsFilesToInject = jsFilesToInject.map(function(path) {
-  return '.tmp/public/' + path;
-});
+var cssFilesToInjectMapped = {};
+for(var key in cssFilesToInject) {
+  cssFilesToInjectMapped[key] = cssFilesToInject[key].map(function (path) {
+    return '.tmp/public/' + path;
+  });
+}
+module.exports.cssFilesToInject = cssFilesToInjectMapped;
+
+var jsFilesToInjectMapped = {};
+for(var key in jsFilesToInject) {
+  jsFilesToInjectMapped[key] = jsFilesToInject[key].map(function(path) {
+    return '.tmp/public/' + path;
+  });
+}
+module.exports.jsFilesToInject = jsFilesToInjectMapped;
+
+
 module.exports.templateFilesToInject = templateFilesToInject.map(function(path) {
   return 'assets/' + path;
 });

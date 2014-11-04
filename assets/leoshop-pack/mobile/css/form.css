@@ -1,0 +1,204 @@
+.sky-form .input,
+.sky-form .select,
+.sky-form .textarea,
+.sky-form .radio,
+.sky-form .checkbox,
+.sky-form .toggle,
+.sky-form .button {
+	position: relative;
+	display: block;
+}
+.sky-form .input input,
+.sky-form .select select,
+.sky-form .textarea textarea {
+	display: block;
+	width: 100%;
+	height: 39px;
+	outline: none;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 0;
+	background:none;
+	border:2px solid #fff;
+	font-size:0.85em;
+	color:#78E3FD;
+	appearance: normal;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+}
+/**/
+/* file inputs */
+/**/
+.sky-form .input-file .button {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	float: none;
+	height: 31px;
+	margin: 0;
+	padding: 0 20px;
+	font-size: 13px;
+	line-height: 31px;
+}
+.sky-form .input-file .button:hover {
+	box-shadow: none;
+}
+.sky-form .input-file .button input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0;
+	font-size: 30px;
+	cursor: pointer;
+	opacity: 0;
+}
+.sky-form .label {
+	display: block;
+	margin-bottom: 6px;
+	line-height: 19px;
+}
+.w_sidebar h3{
+	padding:0 20px 10px;
+	font-size: 1em;
+	color: #555555;
+	text-transform:uppercase;
+}
+/* radios and checkboxes */
+.sky-form {
+	/*--margin-top: -10px;--*/
+	margin: 10px 0;
+}
+.row1{
+	outline:none;
+	overflow: auto;
+	height: 200px;
+}
+.sky-form h4{
+	color: #777;
+	font-size:0.8125em;
+	padding: 6px 10px;
+	background: #F7F7F7;
+	border: 1px solid #E6E6E6;
+	text-transform: uppercase;
+	margin-bottom: 10px;
+}
+.sky-form .label {
+	display: block;
+	margin-bottom: 6px;
+	line-height: 19px;
+}
+.sky-form .label.col {
+	margin: 0;
+	padding-top: 10px;
+}
+.sky-form .input,
+.sky-form .select,
+.sky-form .textarea,
+.sky-form .radio,
+.sky-form .checkbox,
+.sky-form .toggle,
+.sky-form .button {
+	position: relative;
+	display: block;
+}
+/* selects */
+.sky-form .select i {
+	position: absolute;
+	top: 14px;
+	right: 14px;
+	width:10px;
+	height: 11px;
+	background: #FFF;
+}
+.sky-form .select i:after {
+	bottom: 0;
+	border-top: 4px solid #404040;
+}
+.sky-form .select i:before {
+	top: 0;
+	border-bottom: 4px solid #404040;
+}
+.sky-form .select-multiple select {
+	height: auto;
+}
+/* radios and checkboxes */
+.sky-form .radio,.sky-form .checkbox {
+	outline:none;
+	border:none;
+	margin-bottom: 4px;
+	padding-left: 27px;
+	font-size: 13px;
+	line-height: 27px;
+	color: #555555;
+	cursor: pointer;
+	text-transform: capitalize;
+}
+.sky-form .radio{
+	text-transform: none;
+}
+.sky-form .radio:last-child,
+.sky-form .checkbox:last-child {
+	margin-bottom: 0;
+}
+.sky-form .radio input,
+.sky-form .checkbox input {
+	position: absolute;
+	left: -9999px;
+}
+.sky-form .radio i,
+.sky-form .checkbox i {
+	position: absolute;
+	top: 5px;
+	left: 0;
+	display: block;
+	width: 13px;
+	height: 13px;
+	outline: none;
+	border-width: 2px;
+	border-style: solid;
+	background: #fff;
+}
+.sky-form .radio i {
+	border-radius: 50%;
+}
+.sky-form .radio input + i:after,
+.sky-form .checkbox input + i:after {
+	position: absolute;
+	opacity: 0;
+}
+.sky-form .radio input:checked + i:after,
+.sky-form .checkbox input:checked + i:after {
+	opacity: 1;
+}
+.sky-form .inline-group {
+	margin: 0 -30px -4px 0;
+}
+.sky-form .inline-group .radio,
+.sky-form .inline-group .checkbox {
+	float: left;
+	margin-right: 30px;
+}
+.sky-form .inline-group .radio:last-child,
+.sky-form .inline-group .checkbox:last-child {
+	margin-bottom: 4px;
+}
+.sky-form .checkbox input + i:after {
+	content: '\f00c';
+	top: 0px;
+	left: -2px;
+	width: 15px;
+	height: 15px;
+	background: url(../images/b-arrow.png);
+	text-align: center;
+}
+.sky-form .checkbox input + i:after {
+	color: #2DA5DA;
+}
+.sky-form .checkbox i{
+	border-color:#E5E5E5;
+}
+.sky-form .radio input:checked + i,
+.sky-form .checkbox input:checked + i,
+.sky-form .toggle input:checked + i {
+	border-color: #2da5da;	
+}

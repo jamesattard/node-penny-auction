@@ -22,9 +22,9 @@ module.exports = function(grunt) {
 				appRoot: '.tmp/public'
 			},
 			files: {
-				'.tmp/public/**/*.html': require('../pipeline').jsFilesToInject,
-				'views/**/*.html': require('../pipeline').jsFilesToInject,
-				'views/**/*.ejs': require('../pipeline').jsFilesToInject
+				'.tmp/public/backbone/**/*.html': require('../pipeline').jsFilesToInject.backbone,
+				'views/backbone/**/*.html': require('../pipeline').jsFilesToInject.backbone,
+				'views/backbone/**/*.ejs': require('../pipeline').jsFilesToInject.backbone
 			}
 		},
 
@@ -81,9 +81,9 @@ module.exports = function(grunt) {
 			},
 
 			files: {
-				'.tmp/public/**/*.html': require('../pipeline').cssFilesToInject,
-				'views/**/*.html': require('../pipeline').cssFilesToInject,
-				'views/**/*.ejs': require('../pipeline').cssFilesToInject
+				'.tmp/public/backbone/**/*.html': require('../pipeline').cssFilesToInject.backbone,
+				'views/backbone/**/*.html': require('../pipeline').cssFilesToInject.backbone,
+				'views/backbone/**/*.ejs': require('../pipeline').cssFilesToInject.backbone
 			}
 		},
 
@@ -97,9 +97,9 @@ module.exports = function(grunt) {
 			},
 
 			files: {
-				'.tmp/public/**/*.html': require('../pipeline').cssFilesToInject,
-				'views/**/*.html': require('../pipeline').cssFilesToInject,
-				'views/**/*.ejs': require('../pipeline').cssFilesToInject
+				'.tmp/public/backbone/**/*.html': require('../pipeline').cssFilesToInject.backbone,
+				'views/backbone/**/*.html': require('../pipeline').cssFilesToInject.backbone,
+				'views/backbone/**/*.ejs': require('../pipeline').cssFilesToInject.backbone
 			}
 		},
 
@@ -155,7 +155,7 @@ module.exports = function(grunt) {
 				appRoot: '.tmp/public'
 			},
 			files: {
-				'views/**/*.jade': require('../pipeline').jsFilesToInject
+				'views/backbone/**/*.jade': require('../pipeline').jsFilesToInject.backbone
 			}
 		},
 
@@ -206,7 +206,7 @@ module.exports = function(grunt) {
 			},
 
 			files: {
-				'views/**/*.jade': require('../pipeline').cssFilesToInject
+				'views/backbone/**/*.jade': require('../pipeline').cssFilesToInject.backbone
 			}
 		},
 
